@@ -28,36 +28,37 @@ public final class UltraMemoryCore implements ModInitializer {
     private static MemoryProfile activeProfile;
 
     @Override
-    public void onInitialize() {
+public void onInitialize() {
 
-        config = UltraMemoryCoreConfig.load();
+    config = UltraMemoryCoreConfig.load();
 
-        activeProfile =
-                PlatformDetector.detectProfile(config.getMemoryProfile());
+    activeProfile =
+            PlatformDetector.detectProfile(config.getMemoryProfile());
+
+    LOGGER.info(
+            "[UltraMemoryCore] Initialized with Profile: {}",
+            activeProfile
+    );
+
+    CommandRegistrationCallback.EVENT.register(
+            (dispatcher, registryAccess, environment) ->
+                    UmcCommand.register(dispatcher)
+    );
+
+    // Đóng hẳn Minecraft
+    ClientLifecycleEvents.CLIENT_STOPPING.register(
+            client -> trimAllCaches()
+    );
+
+    // Rời world về menu chính
+    ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+        trimAllCaches();
 
         LOGGER.info(
-                "[UltraMemoryCore] Initialized with Profile: {}",
-                activeProfile
+                "[UltraMemoryCore] World disconnected - caches trimmed."
         );
-
-        CommandRegistrationCallback.EVENT.register(
-                (dispatcher, registryAccess, environment) ->
-                        UmcCommand.register(dispatcher)
-        );
-
-        // Đóng hẳn Minecraft
-ClientLifecycleEvents.CLIENT_STOPPING.register(
-        client -> trimAllCaches()
-);
-
-// Rời world về menu chính
-ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-    trimAllCaches();
-
-    LOGGER.info("[UltraMemoryCore] World disconnected - caches trimmed.");
-});
-        );
-    }
+    });
+}
 
     public static UltraMemoryCoreConfig getConfig() {
         return config;
