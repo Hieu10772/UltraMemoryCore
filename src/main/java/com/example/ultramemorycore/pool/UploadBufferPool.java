@@ -1,4 +1,3 @@
-```java
 package com.example.ultramemorycore.pool;
 
 import com.example.ultramemorycore.memory.PlatformDetector;
@@ -92,4 +91,3 @@ public final class UploadBufferPool {
         return value == highest ? value : highest << 1;
     }
 }
-```
