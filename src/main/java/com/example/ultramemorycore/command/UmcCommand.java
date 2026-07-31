@@ -1,5 +1,6 @@
 package com.example.ultramemorycore.command;
 
+import com.example.ultramemorycore.memory.SharedPropertyMap;
 import com.example.ultramemorycore.UltraMemoryCore;
 import com.example.ultramemorycore.pool.ArrayPools;
 import com.mojang.brigadier.CommandDispatcher;
@@ -21,9 +22,13 @@ public class UmcCommand {
         Runtime r = Runtime.getRuntime();
         long usedMB = (r.totalMemory() - r.freeMemory()) / (1024 * 1024);
         long maxMB = r.maxMemory() / (1024 * 1024);
-        source.sendFeedback(() -> Text.literal("§a[UMC Stats] §fUsed: " + usedMB + "MB / Max: " + maxMB + "MB | Profile: " + UltraMemoryCore.getActiveProfile()), false);
-        return 1;
-    }
+        source.sendFeedback(() -> Text.literal(
+                "§a[UMC Stats] §fUsed: " + usedMB +
+                "MB / Max: " + maxMB +
+                "MB | SharedProperties: " +
+                SharedPropertyMap.size()
+        ), false);
+
 
     private static int executeGC(ServerCommandSource source) {
         UltraMemoryCore.trimAllCaches();
