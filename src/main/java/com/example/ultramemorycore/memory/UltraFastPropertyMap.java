@@ -10,11 +10,17 @@ public final class UltraFastPropertyMap {
 
     private static final ConcurrentHashMap<PropertyKey, Map<Property<?>, Comparable<?>>> INTERN =
             new ConcurrentHashMap<>();
+    private static final int MAX_ENTRIES = 8192;
 
     private UltraFastPropertyMap() {}
 
     public static Map<Property<?>, Comparable<?>> intern(
             Map<Property<?>, Comparable<?>> original
+        if (INTERN.size() > MAX_ENTRIES) {
+
+    INTERN.clear();
+
+}
     ) {
         if (original == null || original.isEmpty()) {
             return original;
@@ -22,7 +28,10 @@ public final class UltraFastPropertyMap {
 
         PropertyKey key = PropertyKey.from(original);
 
-        return INTERN.computeIfAbsent(key, k -> original);
+        return INTERN.computeIfAbsent(
+        key,
+        k -> Map.copyOf(original)
+);
     }
 
     public static int size() {
@@ -33,19 +42,59 @@ public final class UltraFastPropertyMap {
         INTERN.clear();
     }
 
-    private record PropertyKey(int hash, int size) {
+public static void trim() {
 
-        static PropertyKey from(Map<Property<?>, Comparable<?>> map) {
-            int hash = 1;
-
-            Collection<Map.Entry<Property<?>, Comparable<?>>> entries = map.entrySet();
-
-            for (Map.Entry<Property<?>, Comparable<?>> entry : entries) {
-                hash = 31 * hash + entry.getKey().getName().hashCode();
-                hash = 31 * hash + entry.getValue().hashCode();
-            }
-
-            return new PropertyKey(hash, map.size());
-        }
+    if (INTERN.size() > MAX_ENTRIES / 2) {
+        INTERN.clear();
     }
+}
+
+    private record PropertyKey(
+        int hash,
+        int size,
+        Map<Property<?>, Comparable<?>> original
+) {
+
+    static PropertyKey from(Map<Property<?>, Comparable<?>> map) {
+
+        int hash = 1;
+
+        for (Map.Entry<Property<?>, Comparable<?>> entry : map.entrySet()) {
+
+            hash = 31 * hash + System.identityHashCode(entry.getKey());
+
+            hash = 31 * hash + entry.getValue().hashCode();
+
+        }
+
+        return new PropertyKey(
+                hash,
+                map.size(),
+                map
+        );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof PropertyKey other)) {
+            return false;
+        }
+
+        if (hash != other.hash || size != other.size) {
+            return false;
+        }
+
+        return original.equals(other.original);
+    }
+
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+}
 }
