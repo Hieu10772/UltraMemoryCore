@@ -45,16 +45,13 @@ public final class UltraMemoryCore implements ModInitializer {
                         UmcCommand.register(dispatcher)
         );
 
-        // Dedicated / integrated server stopping
-        ServerLifecycleEvents.SERVER_STOPPING.register(
-                server -> trimAllCaches()
-        );
+        // Đóng hẳn Minecraft
+ClientLifecycleEvents.CLIENT_STOPPING.register(
+        client -> trimAllCaches()
+);
 
-        // Thoát hẳn game client
-        ClientLifecycleEvents.CLIENT_STOPPING.register(
-                client -> trimAllCaches()
-            
-            ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+// Rời world về menu chính
+ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
     trimAllCaches();
 
     LOGGER.info("[UltraMemoryCore] World disconnected - caches trimmed.");
