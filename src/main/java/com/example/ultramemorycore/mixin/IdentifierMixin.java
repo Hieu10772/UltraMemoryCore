@@ -9,8 +9,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Identifier.class)
 public class IdentifierMixin {
-    @Inject(method = "of(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/util/Identifier;", at = @At("HEAD"), cancellable = true, require = 0)
-    private static void onOf(String namespace, String path, CallbackInfoReturnable<Identifier> cir) {
-        cir.setReturnValue(IdentifierCache.of(namespace, path));
+
+    @Inject(
+        method = "of(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/util/Identifier;",
+        at = @At("RETURN"),
+        cancellable = true,
+        require = 0
+    )
+    private static void ultramemorycore$cache(
+            String namespace,
+            String path,
+            CallbackInfoReturnable<Identifier> cir
+    ) {
+        cir.setReturnValue(
+                IdentifierCache.cache(cir.getReturnValue())
+        );
     }
 }
