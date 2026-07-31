@@ -84,7 +84,7 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
         
         FastPropertyMap.clear();
 
-        SharedPropertyMap.clear();
+        SharedPropertyMap.trim();
 
         VoxelShapeCache.clear();
 
