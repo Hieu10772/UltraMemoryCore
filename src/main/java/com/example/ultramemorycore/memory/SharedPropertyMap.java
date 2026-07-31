@@ -1,4 +1,3 @@
-```java
 package com.example.ultramemorycore.memory;
 
 import net.minecraft.state.property.Property;
@@ -45,4 +44,3 @@ public final class SharedPropertyMap {
         CACHE.clear();
     }
 }
-```
