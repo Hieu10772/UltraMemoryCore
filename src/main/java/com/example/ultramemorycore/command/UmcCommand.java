@@ -10,7 +10,7 @@ import net.minecraft.text.Text;
 public class UmcCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("umc")
-            .requires(source -> source.getServer().isHost(source.getPlayer()))
+            .requires(source -> true)
             .then(CommandManager.literal("stats").executes(ctx -> showStats(ctx.getSource())))
             .then(CommandManager.literal("gc").executes(ctx -> executeGC(ctx.getSource())))
             .then(CommandManager.literal("buffers").executes(ctx -> showBuffers(ctx.getSource())))
