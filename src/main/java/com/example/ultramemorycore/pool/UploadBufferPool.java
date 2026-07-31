@@ -16,9 +16,13 @@ public final class UploadBufferPool {
 
     private static final Map<Integer, Deque<ByteBuffer>> BUCKETS =
             new ConcurrentHashMap<>();
+    private static volatile long temporaryLimit = 16L * 1024L * 1024L;
 
     private UploadBufferPool() {}
-
+    
+    public static void configure(long limitBytes) {
+     temporaryLimit = Math.max(1024L * 1024L, limitBytes);
+ }
     public static ByteBuffer acquire(int capacity) {
 
         // iOS + Pojav: không reuse direct buffer để tránh native memory buildup
@@ -65,7 +69,7 @@ if (bucketSize > maxBucket) {
 
     int capacity = buffer.capacity();
 
-    if (capacity > DESKTOP_MAX_BUCKET) {
+    if (capacity > DESKTOP_MAX_BUCKET || capacity > temporaryLimit) {
         return;
     }
 
