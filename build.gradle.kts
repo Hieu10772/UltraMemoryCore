@@ -1,4 +1,3 @@
-```kotlin
 plugins {
     id("java")
     id("fabric-loom") version "1.11-SNAPSHOT"
@@ -66,4 +65,3 @@ tasks.register<JavaExec>("runBenchmark") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.example.ultramemorycore.util.MemoryBenchmark")
 }
-```
