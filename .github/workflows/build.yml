@@ -1,11 +1,16 @@
 name: Build UltraMemoryCore
 
 on:
+  # Tự động build khi push lên BẤM KỲ nhánh nào
   push:
-    branches: [ "main", "master" ]
+    branches:
+      - '**'
+  # Tự động build khi tạo Pull Request
   pull_request:
-    branches: [ "main", "master" ]
-  workflow_dispatch: # Cho phép bấm nút "Run workflow" thủ công trên giao diện GitHub Web
+    branches:
+      - '**'
+  # Giữ lại tùy chọn này để nếu muốn bấm tay vẫn bấm được
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,7 +29,6 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
-        # Cố định bản Gradle 8.12 ổn định (Tránh lỗi Gradle 9.x xung đột với Loom/Fabric)
         gradle-version: '8.12'
 
     - name: Grant execute permission for gradlew
