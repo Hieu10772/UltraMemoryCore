@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.memory;
 
+import com.example.ultramemorycore.memory.WeakCacheSweeper;
 import net.minecraft.util.shape.VoxelShape;
-
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;
 
