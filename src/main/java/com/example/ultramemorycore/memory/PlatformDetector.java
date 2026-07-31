@@ -1,4 +1,3 @@
-```java
 package com.example.ultramemorycore.memory;
 
 import java.util.Locale;
@@ -38,4 +37,3 @@ public final class PlatformDetector {
         return detectProfile(null) == MemoryProfile.IOS_POJAV;
     }
 }
-```
