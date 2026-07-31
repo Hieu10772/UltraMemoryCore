@@ -13,9 +13,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.ultramemorycore.UltraMemoryCore"
+        "com.example.ultramemorycore.UltraMemoryCore"
+    ],
+    "client": [
+        "com.example.ultramemorycore.client.UltraMemoryClient"
     ]
-  },
+},
   "mixins": [
     "ultramemorycore.mixins.json"
   ],
