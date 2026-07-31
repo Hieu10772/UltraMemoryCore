@@ -72,6 +72,7 @@ public void onInitialize() {
      * Dọn toàn bộ cache và pool để giảm memory spike sau khi thoát world.
      */
     public static void trimAllCaches() {
+        FastPropertyMap.clear();
 
         SharedPropertyMap.clear();
 
