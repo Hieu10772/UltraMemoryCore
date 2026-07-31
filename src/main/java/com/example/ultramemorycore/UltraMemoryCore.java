@@ -62,6 +62,10 @@ public void onInitialize() {
                 "[UltraMemoryCore] World disconnected - caches trimmed."
         );
     });
+    // Tick governor mỗi frame client
+ClientTickEvents.END_CLIENT_TICK.register(client -> {
+    ChunkGovernor.tick();
+});
 }
 
     public static UltraMemoryCoreConfig getConfig() {
