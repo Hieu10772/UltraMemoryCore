@@ -80,7 +80,7 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
      * Dọn toàn bộ cache và pool để giảm memory spike sau khi thoát world.
      */
     public static void trimAllCaches() {
-        UltraFastPropertyMap.clear();
+        UltraFastPropertyMap.trim();
         
         FastPropertyMap.clear();
 
