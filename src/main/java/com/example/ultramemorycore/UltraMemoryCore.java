@@ -1,5 +1,7 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.ChunkGovernor;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import com.example.ultramemorycore.memory.FastPropertyMap;
 import com.example.ultramemorycore.memory.UltraFastPropertyMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
