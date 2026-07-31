@@ -1,3 +1,4 @@
+```kotlin
 plugins {
     id("java")
     id("fabric-loom") version "1.11-SNAPSHOT"
@@ -12,13 +13,20 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    mappings("net.fabricmc:yarn:${project.property("yarn_mappings")}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    val minecraftVersion = project.property("minecraft_version") as String
+    val yarnMappings = project.property("yarn_mappings") as String
+    val loaderVersion = project.property("loader_version") as String
+    val fabricVersion = project.property("fabric_version") as String
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
+    minecraft("com.mojang:minecraft:$minecraftVersion")
+    mappings("net.fabricmc:yarn:$yarnMappings:v2")
+    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
 
-    // FastUtil & Gson are bundled with Minecraft JVM runtime
+    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
+
+    // Explicit dependencies for standalone benchmark and future optimization code
+    implementation("com.google.code.gson:gson:2.13.1")
+    implementation("it.unimi.dsi:fastutil:8.5.18")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -27,14 +35,21 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    withSourcesJar()
 }
 
 tasks.processResources {
     inputs.property("version", project.version)
+
     filesMatching("fabric.mod.json") {
-        expand("version" to project.version)
+        expand(
+            mapOf(
+                "version" to project.version,
+                "minecraft_version" to project.property("minecraft_version"),
+                "loader_version" to project.property("loader_version")
+            )
+        )
     }
 }
 
@@ -47,6 +62,8 @@ tasks.jar {
 tasks.register<JavaExec>("runBenchmark") {
     group = "benchmark"
     description = "Runs the standalone UltraMemoryCore memory allocation benchmark."
+
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.example.ultramemorycore.util.MemoryBenchmark")
 }
+```
