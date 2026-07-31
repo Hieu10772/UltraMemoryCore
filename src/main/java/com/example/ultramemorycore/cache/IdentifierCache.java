@@ -1,23 +1,35 @@
 package com.example.ultramemorycore.cache;
 
 import net.minecraft.util.Identifier;
+
 import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class IdentifierCache {
-    private static final Map<String, SoftReference<Identifier>> CACHE = new ConcurrentHashMap<>();
+public final class IdentifierCache {
 
-    public static Identifier of(String namespace, String path) {
-        String key = namespace + ":" + path;
+    private static final Map<String, SoftReference<Identifier>> CACHE =
+            new ConcurrentHashMap<>();
+
+    private IdentifierCache() {}
+
+    public static Identifier cache(Identifier identifier) {
+        if (identifier == null) {
+            return null;
+        }
+
+        String key = identifier.toString();
+
         SoftReference<Identifier> ref = CACHE.get(key);
         if (ref != null) {
-            Identifier id = ref.get();
-            if (id != null) return id;
+            Identifier cached = ref.get();
+            if (cached != null) {
+                return cached;
+            }
         }
-        Identifier id = Identifier.of(namespace, path);
-        CACHE.put(key, new SoftReference<>(id));
-        return id;
+
+        CACHE.put(key, new SoftReference<>(identifier));
+        return identifier;
     }
 
     public static void clear() {
