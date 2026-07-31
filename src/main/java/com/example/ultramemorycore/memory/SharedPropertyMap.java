@@ -17,6 +17,10 @@ public final class SharedPropertyMap {
     public static int size() {
         return UltraFastPropertyMap.size();
     }
+    
+    public static void trim() {
+        UltraFastPropertyMap.trim();
+    }
 
     public static void clear() {
         UltraFastPropertyMap.clear();
