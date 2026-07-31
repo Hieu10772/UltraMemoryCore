@@ -17,7 +17,8 @@ public final class VoxelShapeCache {
             return null;
         }
 
-        int hash = shape.toString().hashCode();
+        // Dùng hasher riêng thay vì toString().hashCode()
+        int hash = VoxelShapeHasher.hash(shape);
 
         WeakReference<VoxelShape> ref = CACHE.get(hash);
 
