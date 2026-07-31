@@ -28,9 +28,13 @@ public final class UploadBufferPool {
 
         int bucketSize = nextPowerOfTwo(capacity);
 
-        if (bucketSize > DESKTOP_MAX_BUCKET) {
-            return allocate(bucketSize);
-        }
+int maxBucket = PlatformDetector.disableUploadBufferPooling()
+        ? IOS_MAX_BUCKET
+        : DESKTOP_MAX_BUCKET;
+
+if (bucketSize > maxBucket) {
+    return allocate(bucketSize);
+}
 
         Deque<ByteBuffer> stack = BUCKETS.get(bucketSize);
 
@@ -50,25 +54,34 @@ public final class UploadBufferPool {
 
     public static void release(ByteBuffer buffer) {
 
-        if (buffer == null || !buffer.isDirect()) {
-            return;
-        }
-
-        // iOS: bỏ luôn, để GC/native cleaner xử lý
-        if (PlatformDetector.disableUploadBufferPooling()) {
-            return;
-        }
-
-        int capacity = buffer.capacity();
-
-        if (capacity > DESKTOP_MAX_BUCKET) {
-            return;
-        }
-
-        BUCKETS
-                .computeIfAbsent(capacity, k -> new ArrayDeque<>())
-                .offerFirst(buffer);
+    if (buffer == null || !buffer.isDirect()) {
+        return;
     }
+
+    // iOS / Pojav: không giữ DirectBuffer
+    if (PlatformDetector.disableUploadBufferPooling()) {
+        return;
+    }
+
+    int capacity = buffer.capacity();
+
+    if (capacity > DESKTOP_MAX_BUCKET) {
+        return;
+    }
+
+    Deque<ByteBuffer> deque =
+            BUCKETS.computeIfAbsent(capacity, k -> new ArrayDeque<>());
+
+    synchronized (deque) {
+
+        // Giới hạn tối đa 4 buffer cho mỗi bucket
+        if (deque.size() >= 4) {
+            return;
+        }
+
+        deque.offerFirst(buffer);
+    }
+}
 
     public static void clear() {
         BUCKETS.clear();
