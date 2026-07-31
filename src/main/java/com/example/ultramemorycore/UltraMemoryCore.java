@@ -1,5 +1,6 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.UltraFastPropertyMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import com.example.ultramemorycore.cache.BlockStatePaletteCache;
 import com.example.ultramemorycore.cache.NbtStringPool;
@@ -72,6 +73,8 @@ public void onInitialize() {
      * Dọn toàn bộ cache và pool để giảm memory spike sau khi thoát world.
      */
     public static void trimAllCaches() {
+        UltraFastPropertyMap.clear();
+        
         FastPropertyMap.clear();
 
         SharedPropertyMap.clear();
