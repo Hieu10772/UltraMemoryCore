@@ -39,6 +39,7 @@ public final class AdaptiveCacheManager {
             );
 
         } else if (usage > 0.75) {
+            VoxelShapeCache.sweep();
 
             UltraMemoryCore.trimAllCaches();
 
