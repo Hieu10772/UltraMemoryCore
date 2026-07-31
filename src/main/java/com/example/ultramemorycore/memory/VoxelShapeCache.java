@@ -42,4 +42,7 @@ public final class VoxelShapeCache {
     public static void clear() {
         CACHE.clear();
     }
+    public static void sweep() {
+    WeakCacheSweeper.sweep(CACHE);
+    }
 }
