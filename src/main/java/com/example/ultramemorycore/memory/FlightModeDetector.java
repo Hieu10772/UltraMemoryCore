@@ -16,7 +16,7 @@ public final class FlightModeDetector {
 
         if (player == null) return false;
 
-        if (!player.isFallFlying()) return false;
+        if (!player.isGliding()) return false;
 
         double speed = player.getVelocity().length();
 
