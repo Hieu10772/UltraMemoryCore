@@ -1,7 +1,8 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.SharedPropertyMap;
+import com.example.ultramemorycore.memory.VoxelShapeCache;
 import com.example.ultramemorycore.cache.BlockStatePaletteCache;
-import com.example.ultramemorycore.cache.IdentifierCache;
 import com.example.ultramemorycore.cache.NbtStringPool;
 import com.example.ultramemorycore.command.UmcCommand;
 import com.example.ultramemorycore.config.UltraMemoryCoreConfig;
@@ -46,8 +47,9 @@ public class UltraMemoryCore implements ModInitializer {
     }
 
     public static void trimAllCaches() {
+        SharedPropertyMap.clear();
+        VoxelShapeCache.clear();
         NbtStringPool.trim();
-        IdentifierCache.clear();
         BlockStatePaletteCache.clear();
         PaletteArrayPool.clear();
         ArrayPools.clearAll();
