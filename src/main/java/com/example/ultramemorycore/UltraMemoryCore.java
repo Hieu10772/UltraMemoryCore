@@ -85,10 +85,11 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
     ElytraMemoryGuard.tick();
     PostFlightCleanup.tick(client);
     IdleMemoryBalancer.tick(client);
-}
+
     // Cold storage (unload chunk xa)
     ChunkColdStorage.tick(client);
 });
+}
 
     public static UltraMemoryCoreConfig getConfig() {
         return config;
