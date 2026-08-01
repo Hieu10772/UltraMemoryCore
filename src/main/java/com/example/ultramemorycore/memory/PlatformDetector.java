@@ -36,6 +36,9 @@ public final class PlatformDetector {
      * Trên iOS + Pojav + MobileGLues việc reuse direct buffer thường phản tác dụng.
      */
     public static boolean disableUploadBufferPooling() {
-        return DETECTED == MemoryProfile.IOS_POJAV;
-    }
+    MemoryProfile profile = detectProfile(null);
+
+    return profile == MemoryProfile.IOS_POJAV
+            || profile == MemoryProfile.LOW_RAM_ANDROID;
+}
 }
