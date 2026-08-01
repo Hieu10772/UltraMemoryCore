@@ -4,12 +4,15 @@ import java.util.Locale;
 
 public final class PlatformDetector {
 
+    private static final MemoryProfile DETECTED = detect();
+
     private PlatformDetector() {}
 
     public static MemoryProfile detectProfile(MemoryProfile configured) {
-        if (configured != null) {
-            return configured;
-        }
+        return configured != null ? configured : DETECTED;
+    }
+
+    private static MemoryProfile detect() {
 
         String osName = System.getProperty("os.name", "")
                 .toLowerCase(Locale.ROOT);
@@ -18,8 +21,7 @@ public final class PlatformDetector {
                 System.getProperty("pojav.version") != null
                         || System.getenv("POJAV_BUILD") != null;
 
-        if ((osName.contains("ios") || osName.contains("mac"))
-                && isPojav) {
+        if ((osName.contains("ios") || osName.contains("mac")) && isPojav) {
             return MemoryProfile.IOS_POJAV;
         }
 
@@ -34,6 +36,6 @@ public final class PlatformDetector {
      * Trên iOS + Pojav + MobileGLues việc reuse direct buffer thường phản tác dụng.
      */
     public static boolean disableUploadBufferPooling() {
-        return detectProfile(null) == MemoryProfile.IOS_POJAV;
+        return DETECTED == MemoryProfile.IOS_POJAV;
     }
 }
