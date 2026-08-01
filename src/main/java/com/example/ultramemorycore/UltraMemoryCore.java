@@ -1,5 +1,6 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.ChunkColdStorage;
 import com.example.ultramemorycore.memory.ChunkVisibilityTracker;
 import com.example.ultramemorycore.memory.ChunkEvictionManager;
 import com.example.ultramemorycore.memory.IdleMemoryBalancer;
@@ -68,22 +69,27 @@ public void onInitialize() {
                 "[UltraMemoryCore] World disconnected - caches trimmed."
         );
     });
-    // Khi đang chơi, định kỳ trim cache chunk-streaming
+// Tick toàn bộ hệ thống quản lý bộ nhớ client
 ClientTickEvents.END_CLIENT_TICK.register(client -> {
-    if (client.world != null && client.player != null) {
-        ChunkFlightTrimmer.tick();
-        ElytraMemoryGuard.tick();
-        PostFlightCleanup.tick(client);
-        IdleMemoryBalancer.tick(client);
+
+    if (client.world == null || client.player == null) {
+        return;
     }
-});
-    // Tick governor mỗi frame client
-ClientTickEvents.END_CLIENT_TICK.register(client -> {
+
+    // Chunk streaming
+    ChunkFlightTrimmer.tick();
     ChunkGovernor.tick();
     ChunkEvictionManager.tick(client);
     ChunkVisibilityTracker.tick(client);
+
+    // Elytra / idle cleanup
+    ElytraMemoryGuard.tick();
+    PostFlightCleanup.tick(client);
+    IdleMemoryBalancer.tick(client);
+
+    // Cold storage (unload chunk xa)
+    ChunkColdStorage.tick(client);
 });
-}
 
     public static UltraMemoryCoreConfig getConfig() {
         return config;
@@ -93,32 +99,23 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
         return activeProfile;
     }
 
-    /**
-     * Dọn toàn bộ cache và pool để giảm memory spike sau khi thoát world.
-     */
-    public static void trimAllCaches() {
-        UltraFastPropertyMap.trim();
-        
-        FastPropertyMap.clear();
+public static void trimAllCaches() {
 
-        SharedPropertyMap.trim();
+    UltraFastPropertyMap.clear();
+    FastPropertyMap.clear();
+    SharedPropertyMap.clear();
 
-        VoxelShapeCache.sweep();
+    VoxelShapeCache.clear();
 
-        VoxelShapeCache.clear();
+    NbtStringPool.trim();
+    BlockStatePaletteCache.clear();
+    PaletteArrayPool.clear();
 
-        NbtStringPool.trim();
+    ArrayPools.clearAll();
+    UploadBufferPool.clear();
 
-        BlockStatePaletteCache.clear();
+    ChunkColdStorage.clear();
 
-        PaletteArrayPool.clear();
-
-        ArrayPools.clearAll();
-
-        UploadBufferPool.clear();
-
-        LOGGER.info(
-                "[UltraMemoryCore] Memory pools and caches trimmed."
-        );
-    }
+    LOGGER.info("[UltraMemoryCore] Memory pools and caches trimmed.");
+}
 }
