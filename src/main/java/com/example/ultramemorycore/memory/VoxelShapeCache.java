@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.memory;
 
-import com.example.ultramemorycore.memory.WeakCacheSweeper;
 import net.minecraft.util.shape.VoxelShape;
+
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,14 +10,27 @@ public final class VoxelShapeCache {
     private static final ConcurrentHashMap<Integer, WeakReference<VoxelShape>> CACHE =
             new ConcurrentHashMap<>();
 
+    // Giới hạn để chống phình khi bay Elytra
+    private static final int MAX_ENTRIES = 2048;
+
     private VoxelShapeCache() {}
 
     public static VoxelShape deduplicate(VoxelShape shape) {
+
         if (shape == null) {
             return null;
         }
 
-        // Dùng hasher riêng thay vì toString().hashCode()
+        // Dọn các WeakReference đã chết
+        if ((CACHE.size() & 127) == 0) {
+            sweep();
+        }
+
+        // Chống cache phình vô hạn
+        if (CACHE.size() > MAX_ENTRIES) {
+            CACHE.clear();
+        }
+
         int hash = VoxelShapeHasher.hash(shape);
 
         WeakReference<VoxelShape> ref = CACHE.get(hash);
@@ -42,7 +55,8 @@ public final class VoxelShapeCache {
     public static void clear() {
         CACHE.clear();
     }
+
     public static void sweep() {
-    WeakCacheSweeper.sweep(CACHE);
+        WeakCacheSweeper.sweep(CACHE);
     }
 }
