@@ -1,5 +1,6 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.ChunkEvictionManager;
 import com.example.ultramemorycore.memory.IdleMemoryBalancer;
 import com.example.ultramemorycore.memory.PostFlightCleanup;
 import com.example.ultramemorycore.memory.ElytraMemoryGuard;
@@ -78,6 +79,7 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
     // Tick governor mỗi frame client
 ClientTickEvents.END_CLIENT_TICK.register(client -> {
     ChunkGovernor.tick();
+    ChunkEvictionManager.tick(client);
 });
 }
 
