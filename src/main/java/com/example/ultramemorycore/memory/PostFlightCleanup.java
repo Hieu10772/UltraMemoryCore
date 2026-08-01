@@ -19,7 +19,7 @@ public final class PostFlightCleanup {
             return;
         }
 
-        boolean flying = player.isFallFlying();
+        boolean flying = player.isGliding();
 
         // Vừa bắt đầu bay
         if (flying) {
