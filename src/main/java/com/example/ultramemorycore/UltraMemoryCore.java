@@ -1,5 +1,6 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.IdleMemoryBalancer;
 import com.example.ultramemorycore.memory.PostFlightCleanup;
 import com.example.ultramemorycore.memory.ElytraMemoryGuard;
 import com.example.ultramemorycore.memory.ChunkFlightTrimmer;
@@ -71,6 +72,7 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
         ChunkFlightTrimmer.tick();
         ElytraMemoryGuard.tick();
         PostFlightCleanup.tick(client);
+        IdleMemoryBalancer.tick(client);
     }
 });
     // Tick governor mỗi frame client
