@@ -1,5 +1,6 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.ChunkFlightTrimmer;
 import com.example.ultramemorycore.memory.ChunkGovernor;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import com.example.ultramemorycore.memory.FastPropertyMap;
@@ -62,6 +63,12 @@ public void onInitialize() {
                 "[UltraMemoryCore] World disconnected - caches trimmed."
         );
     });
+    // Khi đang chơi, định kỳ trim cache chunk-streaming
+ClientTickEvents.END_CLIENT_TICK.register(client -> {
+    if (client.world != null && client.player != null) {
+        ChunkFlightTrimmer.tick();
+    }
+});
     // Tick governor mỗi frame client
 ClientTickEvents.END_CLIENT_TICK.register(client -> {
     ChunkGovernor.tick();
