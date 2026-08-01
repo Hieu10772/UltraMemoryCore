@@ -10,7 +10,7 @@ public final class UltraFastPropertyMap {
     private static final ConcurrentHashMap<PropertyKey, Map<Property<?>, Comparable<?>>> INTERN =
             new ConcurrentHashMap<>();
 
-    private static final int MAX_ENTRIES = 8192;
+    private static final int MAX_ENTRIES = 4096;
 
     private UltraFastPropertyMap() {}
 
@@ -22,17 +22,15 @@ public final class UltraFastPropertyMap {
             return original;
         }
 
-        // Chống phình cache vô hạn
         if (INTERN.size() > MAX_ENTRIES) {
             INTERN.clear();
         }
 
-        PropertyKey key = PropertyKey.from(original);
+        Map<Property<?>, Comparable<?>> immutable = Map.copyOf(original);
 
-        return INTERN.computeIfAbsent(
-                key,
-                k -> Map.copyOf(original)
-        );
+        PropertyKey key = PropertyKey.from(immutable);
+
+        return INTERN.computeIfAbsent(key, k -> immutable);
     }
 
     public static int size() {
@@ -44,16 +42,12 @@ public final class UltraFastPropertyMap {
     }
 
     public static void trim() {
-        if (INTERN.size() > MAX_ENTRIES / 2) {
+        if (INTERN.size() > 2048) {
             INTERN.clear();
         }
     }
 
-    private record PropertyKey(
-            int hash,
-            int size,
-            Map<Property<?>, Comparable<?>> original
-    ) {
+    private record PropertyKey(int hash, int size) {
 
         static PropertyKey from(
                 Map<Property<?>, Comparable<?>> map
@@ -62,34 +56,15 @@ public final class UltraFastPropertyMap {
             int hash = 1;
 
             for (Map.Entry<Property<?>, Comparable<?>> entry : map.entrySet()) {
-                hash = 31 * hash + System.identityHashCode(entry.getKey());
-                hash = 31 * hash + entry.getValue().hashCode();
+
+                hash = 31 * hash +
+                        System.identityHashCode(entry.getKey());
+
+                hash = 31 * hash +
+                        entry.getValue().hashCode();
             }
 
-            return new PropertyKey(hash, map.size(), map);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-
-            if (this == obj) {
-                return true;
-            }
-
-            if (!(obj instanceof PropertyKey other)) {
-                return false;
-            }
-
-            if (hash != other.hash || size != other.size) {
-                return false;
-            }
-
-            return original.equals(other.original);
-        }
-
-        @Override
-        public int hashCode() {
-            return hash;
+            return new PropertyKey(hash, map.size());
         }
     }
 }
