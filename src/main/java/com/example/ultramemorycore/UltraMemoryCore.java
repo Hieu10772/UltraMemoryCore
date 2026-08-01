@@ -99,6 +99,8 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
         SharedPropertyMap.trim();
 
+        VoxelShapeCache.sweep();
+
         VoxelShapeCache.clear();
 
         NbtStringPool.trim();
