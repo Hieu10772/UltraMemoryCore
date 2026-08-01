@@ -1,5 +1,6 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.ElytraMemoryGuard;
 import com.example.ultramemorycore.memory.ChunkFlightTrimmer;
 import com.example.ultramemorycore.memory.ChunkGovernor;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -67,6 +68,7 @@ public void onInitialize() {
 ClientTickEvents.END_CLIENT_TICK.register(client -> {
     if (client.world != null && client.player != null) {
         ChunkFlightTrimmer.tick();
+        ElytraMemoryGuard.tick();
     }
 });
     // Tick governor mỗi frame client
