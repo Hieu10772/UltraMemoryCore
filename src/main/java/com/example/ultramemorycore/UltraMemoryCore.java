@@ -80,6 +80,7 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
 ClientTickEvents.END_CLIENT_TICK.register(client -> {
     ChunkGovernor.tick();
     ChunkEvictionManager.tick(client);
+    ChunkVisibilityTracker.tick(client);
 });
 }
 
