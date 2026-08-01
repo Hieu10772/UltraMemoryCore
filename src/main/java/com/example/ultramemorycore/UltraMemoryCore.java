@@ -1,5 +1,6 @@
 package com.example.ultramemorycore;
 
+import com.example.ultramemorycore.memory.ChunkVisibilityTracker;
 import com.example.ultramemorycore.memory.ChunkEvictionManager;
 import com.example.ultramemorycore.memory.IdleMemoryBalancer;
 import com.example.ultramemorycore.memory.PostFlightCleanup;
