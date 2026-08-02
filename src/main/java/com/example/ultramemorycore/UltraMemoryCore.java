@@ -28,6 +28,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.fabricmc.loader.api.FabricLoader;
 
 public final class UltraMemoryCore implements ModInitializer {
 
@@ -39,6 +40,17 @@ public final class UltraMemoryCore implements ModInitializer {
 
     @Override
 public void onInitialize() {
+        // Không cho chạy cùng FerriteCore
+    if (FabricLoader.getInstance().isModLoaded("ferritecore")) {
+
+        String message =
+                "Please remove FerritCore to use UltraMemoryCore, " +
+                "Bye FerritCore!";
+
+        LOGGER.error("[UltraMemoryCore] {}", message);
+
+        throw new IllegalStateException(message);
+    }
 
     config = UltraMemoryCoreConfig.load();
 
