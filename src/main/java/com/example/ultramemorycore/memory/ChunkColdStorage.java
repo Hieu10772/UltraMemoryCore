@@ -12,23 +12,50 @@ public final class ChunkColdStorage {
     private static final Map<Long, Long> LAST_VISIBLE =
             new ConcurrentHashMap<>();
 
-    // Sau 5 giây mới bắt đầu coi là chunk lạnh
-    private static final long SOFT_CLEANUP_MS = 5_000L;
-
-    // Sau 60 giây thì bỏ khỏi tracking
-    private static final long HARD_EVICT_MS = 60_000L;
-
-    // Giới hạn sweep mỗi 10 giây
+    // Giới hạn sweep tối đa 1 lần mỗi 10 giây
     private static long lastSweep = 0L;
 
     private ChunkColdStorage() {}
 
+    // ===== Adaptive timings =====
+
+    private static long softCleanupMs() {
+
+        if (MemoryBudget.isLowEnd()) {
+            return 5_000L;
+        }
+
+        if (MemoryBudget.isMidRange()) {
+            return 15_000L;
+        }
+
+        return 30_000L;
+    }
+
+    private static long hardEvictMs() {
+
+        if (MemoryBudget.isLowEnd()) {
+            return 60_000L;
+        }
+
+        if (MemoryBudget.isMidRange()) {
+            return 180_000L;
+        }
+
+        return 300_000L;
+    }
+
+    // ===== Tracking =====
+
     public static void markVisible(ChunkPos pos) {
+
         LAST_VISIBLE.put(
                 pos.toLong(),
                 System.currentTimeMillis()
         );
     }
+
+    // ===== Main tick =====
 
     public static void tick(MinecraftClient client) {
 
@@ -37,6 +64,22 @@ public final class ChunkColdStorage {
         }
 
         long now = System.currentTimeMillis();
+
+        // Emergency cleanup khi RAM quá cao
+        if (MemoryPressure.isCritical()) {
+
+            VoxelShapeCache.clear();
+
+            UltraFastPropertyMap.clear();
+
+            System.gc();
+
+        } else if (MemoryPressure.isHigh()) {
+
+            VoxelShapeCache.sweep();
+
+            UltraFastPropertyMap.trim();
+        }
 
         ChunkPos playerPos = client.player.getChunkPos();
 
@@ -56,18 +99,19 @@ public final class ChunkColdStorage {
             int dx = Math.abs(pos.x - playerPos.x);
             int dz = Math.abs(pos.z - playerPos.z);
 
+            // Giữ thêm 4 chunk đệm ngoài view distance
             int limit =
                     client.options.getViewDistance().getValue() + 4;
 
             // Chunk đã ra khỏi vùng nhìn một thời gian
-            if (age > SOFT_CLEANUP_MS &&
-                    (dx > limit || dz > limit)) {
+            if (age > softCleanupMs()
+                    && (dx > limit || dz > limit)) {
 
                 needSweep = true;
             }
 
             // Quá lâu thì bỏ khỏi tracking
-            if (age > HARD_EVICT_MS) {
+            if (age > hardEvictMs()) {
                 it.remove();
             }
         }
@@ -82,6 +126,8 @@ public final class ChunkColdStorage {
             lastSweep = now;
         }
     }
+
+    // ===== Debug =====
 
     public static int size() {
         return LAST_VISIBLE.size();
