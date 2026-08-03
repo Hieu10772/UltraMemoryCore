@@ -46,13 +46,21 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                             MemoryProfile.class,
                             config.getMemoryProfile()
                     )
-                    .setEnumNameProvider(profile -> switch (profile) {
-                        case AUTO -> Text.literal("Auto");
-                        case DESKTOP -> Text.literal("Desktop");
-                        case LOW_RAM_ANDROID -> Text.literal("Android");
-                        case IOS_POJAV -> Text.literal("iOS / Pojav");
-                        case CUSTOM -> Text.literal("Custom");
-                    })
+                                .setEnumNameProvider(profile -> {
+                if (profile == MemoryProfile.AUTO) {
+                    return Text.literal("Auto");
+                }
+                if (profile == MemoryProfile.DESKTOP) {
+                    return Text.literal("Desktop");
+                }
+                if (profile == MemoryProfile.LOW_RAM_ANDROID) {
+                    return Text.literal("Android");
+                }
+                if (profile == MemoryProfile.IOS_POJAV) {
+                    return Text.literal("iOS / Pojav");
+                }
+                return Text.literal("Custom");
+            })
                     .setSaveConsumer(value -> {
                         config.setMemoryProfile(value);
                         config.save();
