@@ -9,6 +9,12 @@ group = project.property("mod_group") as String
 repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
+
+    // ModMenu
+    maven("https://maven.terraformersmc.com/releases/")
+
+    // Cloth Config
+    maven("https://maven.shedaniel.me/")
 }
 
 dependencies {
