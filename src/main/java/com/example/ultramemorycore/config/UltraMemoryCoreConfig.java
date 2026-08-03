@@ -8,9 +8,9 @@ public final class UltraMemoryCoreConfig {
 
     private MemoryProfile memoryProfile = MemoryProfile.DESKTOP;
 
-    private int maxPaletteCache = 64;
-    private int maxUploadBufferSize = 262_144;
-    private long cacheKeepTimeMs = 15_000L;
+    private int customMaxPaletteCache = 128;
+    private int customMaxUploadBufferSize = 512 * 1024;
+    private long customPoolTimeoutMs = 30_000L;
 
     public boolean isEnabled() {
         return enabled;
@@ -24,32 +24,32 @@ public final class UltraMemoryCoreConfig {
         return memoryProfile;
     }
 
-    public void setMemoryProfile(MemoryProfile profile) {
-        this.memoryProfile = profile;
+    public void setMemoryProfile(MemoryProfile memoryProfile) {
+        this.memoryProfile = memoryProfile;
     }
 
-    public int getMaxPaletteCache() {
-        return maxPaletteCache;
+    public int getCustomMaxPaletteCache() {
+        return customMaxPaletteCache;
     }
 
-    public void setMaxPaletteCache(int value) {
-        this.maxPaletteCache = value;
+    public void setCustomMaxPaletteCache(int value) {
+        this.customMaxPaletteCache = value;
     }
 
-    public int getMaxUploadBufferSize() {
-        return maxUploadBufferSize;
+    public int getCustomMaxUploadBufferSize() {
+        return customMaxUploadBufferSize;
     }
 
-    public void setMaxUploadBufferSize(int value) {
-        this.maxUploadBufferSize = value;
+    public void setCustomMaxUploadBufferSize(int value) {
+        this.customMaxUploadBufferSize = value;
     }
 
-    public long getCacheKeepTimeMs() {
-        return cacheKeepTimeMs;
+    public long getCustomPoolTimeoutMs() {
+        return customPoolTimeoutMs;
     }
 
-    public void setCacheKeepTimeMs(long value) {
-        this.cacheKeepTimeMs = value;
+    public void setCustomPoolTimeoutMs(long value) {
+        this.customPoolTimeoutMs = value;
     }
 
     public static UltraMemoryCoreConfig load() {
