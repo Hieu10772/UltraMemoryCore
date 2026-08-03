@@ -9,7 +9,7 @@
   ],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/ultramemorycore/icon.png",
+  "icon": "assets/modid/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
