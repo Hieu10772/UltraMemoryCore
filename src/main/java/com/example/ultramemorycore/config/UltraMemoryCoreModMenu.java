@@ -47,6 +47,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                             config.getMemoryProfile()
                     )
                     .setEnumNameProvider(profile -> switch (profile) {
+                        case AUTO -> Text.literal("Auto");
                         case DESKTOP -> Text.literal("Desktop");
                         case LOW_RAM_ANDROID -> Text.literal("Android");
                         case IOS_POJAV -> Text.literal("iOS / Pojav");
@@ -59,6 +60,13 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     .build());
 
             boolean custom = config.getMemoryProfile() == MemoryProfile.CUSTOM;
+
+if (!custom) {
+    // chỉ hiển thị mô tả thay vì cho nhập số
+    category.addEntry(entryBuilder.startTextDescription(
+            Text.literal("Custom values are only editable when Device Profile = Custom")
+    ).build());
+}
 
             // Max palette cache
             category.addEntry(entryBuilder.startIntField(
