@@ -1,6 +1,7 @@
 package com.example.ultramemorycore.memory;
 
 public enum MemoryProfile {
+    AUTO(128, 512 * 1024, 30000),
     DESKTOP(256, 1024 * 1024, 60000),
     LOW_RAM_ANDROID(128, 512 * 1024, 30000),
     IOS_POJAV(64, 256 * 1024, 15000);
