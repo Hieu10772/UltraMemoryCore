@@ -23,6 +23,9 @@ dependencies {
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
 
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_config_version")}")
+    modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
+
     // Explicit dependencies for standalone benchmark and future optimization code
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
