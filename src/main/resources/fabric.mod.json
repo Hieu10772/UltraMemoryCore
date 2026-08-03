@@ -5,7 +5,7 @@
   "name": "UltraMemoryCore",
   "description": "High-efficiency memory allocation and Garbage Collection optimization core for PojavLauncher/iOS and mobile environments.",
   "authors": [
-    "Senior JVM Engineer"
+    "Hieu10772"
   ],
   "contact": {},
   "license": "MIT",
@@ -17,6 +17,9 @@
     ],
     "client": [
         "com.example.ultramemorycore.client.UltraMemoryClient"
+    ],
+    "modmenu": [
+    "com.example.ultramemorycore.config.UltraMemoryCoreModMenu"
     ]
 },
   "mixins": [
