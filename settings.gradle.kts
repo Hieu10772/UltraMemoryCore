@@ -1,4 +1,3 @@
-```kotlin
 pluginManagement {
     repositories {
         maven("https://maven.fabricmc.net/") {
@@ -29,4 +28,3 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "UltraMemoryCore"
-```
