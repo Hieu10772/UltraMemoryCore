@@ -3,7 +3,7 @@
   "id": "ultramemorycore",
   "version": "${version}",
   "name": "UltraMemoryCore",
-  "description": "High-efficiency memory allocation and Garbage Collection optimization core for PojavLauncher/iOS and mobile environments.",
+  "description": "Reduces RAM usage and memory allocation overhead to improve Minecraft performance and stability.",
   "authors": [
     "Hieu10772"
   ],
