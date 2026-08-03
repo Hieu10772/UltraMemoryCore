@@ -34,6 +34,9 @@ public final class UltraMemoryCore implements ModInitializer {
 
     public static final String MOD_ID = "ultramemorycore";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static boolean isEnabled() {
+    return config != null && config.isEnabled();
+}
 
     private static UltraMemoryCoreConfig config;
     private static MemoryProfile activeProfile;
@@ -82,6 +85,10 @@ public void onInitialize() {
     });
 // Tick toàn bộ hệ thống quản lý bộ nhớ client
 ClientTickEvents.END_CLIENT_TICK.register(client -> {
+    
+    if (!UltraMemoryCore.isEnabled()) {
+        return;
+    }
 
     if (client.world == null || client.player == null) {
         return;
