@@ -31,7 +31,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     )
                     .setDefaultValue(true)
                     .setSaveConsumer(value -> {
-                        UltraMemoryCore.getConfig().setEnabled(value);
+                        UltraMemoryCore.getConfig().setEnabled(value.booleanValue());
                         UltraMemoryCore.getConfig().save();
                     })
                     .build());
