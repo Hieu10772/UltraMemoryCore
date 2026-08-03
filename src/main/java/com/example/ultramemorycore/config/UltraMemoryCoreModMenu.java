@@ -40,15 +40,13 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     })
                     .build());
 
-            // Device selector
+            // Device profile
             category.addEntry(entryBuilder.startEnumSelector(
                             Text.literal("Device Profile"),
                             MemoryProfile.class,
                             config.getMemoryProfile()
                     )
-                    .setDefaultValue(MemoryProfile.AUTO)
                     .setEnumNameProvider(profile -> switch (profile) {
-                        case AUTO -> Text.literal("Auto");
                         case DESKTOP -> Text.literal("Desktop");
                         case LOW_RAM_ANDROID -> Text.literal("Android");
                         case IOS_POJAV -> Text.literal("iOS / Pojav");
@@ -62,48 +60,51 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
 
             boolean custom = config.getMemoryProfile() == MemoryProfile.CUSTOM;
 
-            // Max cache
+            // Max palette cache
             category.addEntry(entryBuilder.startIntField(
-                            Text.literal("Max Cache Size"),
+                            Text.literal("Max Palette Cache"),
                             config.getCustomMaxPaletteCache()
                     )
                     .setDefaultValue(128)
-                    .setMin(16)
+                    .setMin(32)
                     .setMax(2048)
-                    .setEditable(custom)
                     .setSaveConsumer(value -> {
-                        config.setCustomMaxPaletteCache(value);
-                        config.save();
+                        if (custom) {
+                            config.setCustomMaxPaletteCache(value);
+                            config.save();
+                        }
                     })
                     .build());
 
-            // Max buffer
+            // Upload buffer (KB)
             category.addEntry(entryBuilder.startIntField(
-                            Text.literal("Max Upload Buffer Size (KB)"),
+                            Text.literal("Max Upload Buffer (KB)"),
                             config.getCustomMaxUploadBufferSize() / 1024
                     )
                     .setDefaultValue(512)
                     .setMin(64)
                     .setMax(8192)
-                    .setEditable(custom)
                     .setSaveConsumer(value -> {
-                        config.setCustomMaxUploadBufferSize(value * 1024);
-                        config.save();
+                        if (custom) {
+                            config.setCustomMaxUploadBufferSize(value * 1024);
+                            config.save();
+                        }
                     })
                     .build());
 
             // Cache timeout
             category.addEntry(entryBuilder.startLongField(
-                            Text.literal("Cache Cleanup Delay (ms)"),
+                            Text.literal("Cache Keep Time (ms)"),
                             config.getCustomPoolTimeoutMs()
                     )
                     .setDefaultValue(30000L)
-                    .setMin(1000L)
+                    .setMin(5000L)
                     .setMax(600000L)
-                    .setEditable(custom)
                     .setSaveConsumer(value -> {
-                        config.setCustomPoolTimeoutMs(value);
-                        config.save();
+                        if (custom) {
+                            config.setCustomPoolTimeoutMs(value);
+                            config.save();
+                        }
                     })
                     .build());
 
