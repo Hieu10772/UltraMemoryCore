@@ -72,14 +72,18 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
         }
 ))
                     .setSaveConsumer(value -> {
-                        config.setMemoryProfile(value);
-                        config.save();
-                            
-                        net.minecraft.client.MinecraftClient client =
-                                net.minecraft.client.MinecraftClient.getInstance();
+    config.setMemoryProfile(value);
+    config.save();
 
-                        client.execute(() -> client.setScreen(parent));
-                    })
+    net.minecraft.client.MinecraftClient client =
+            net.minecraft.client.MinecraftClient.getInstance();
+
+    client.execute(() ->
+            client.setScreen(new UltraMemoryCoreModMenu()
+                    .getModConfigScreenFactory()
+                    .create(parent))
+    );
+})
                     .build());
 
                         boolean custom = config.getMemoryProfile() == MemoryProfile.CUSTOM;
