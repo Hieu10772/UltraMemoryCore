@@ -72,28 +72,14 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
         }
 ))
                     .setSaveConsumer(value -> {
-    config.setMemoryProfile(value);
-    config.save();
+                        config.setMemoryProfile(value);
+                        config.save();
+                            
+                        net.minecraft.client.MinecraftClient client =
+                                net.minecraft.client.MinecraftClient.getInstance();
 
-    net.minecraft.client.MinecraftClient client =
-            net.minecraft.client.MinecraftClient.getInstance();
-
-    client.execute(() -> {
-        // đóng màn hình hiện tại
-        client.setScreen(null);
-
-        // mở lại màn hình config với profile mới
-        client.setScreen(getModConfigScreenFactory().create(parent));
-    });
-})
-
-    net.minecraft.client.MinecraftClient client =
-            net.minecraft.client.MinecraftClient.getInstance();
-
-    client.execute(() ->
-            client.setScreen(getModConfigScreenFactory().create(parent))
-    );
-})
+                        client.execute(() -> client.setScreen(parent));
+                    })
                     .build());
 
                         boolean custom = config.getMemoryProfile() == MemoryProfile.CUSTOM;
