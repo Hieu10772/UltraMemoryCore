@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("fabric-loom") version "1.11-SNAPSHOT"
+    id("fabric-loom") version "1.12-SNAPSHOT"
 }
 
 version = project.property("mod_version") as String
@@ -23,11 +23,10 @@ dependencies {
     val loaderVersion = project.property("loader_version") as String
     val fabricVersion = project.property("fabric_version") as String
 
-    minecraft("com.mojang:minecraft:$minecraftVersion")
-    mappings("net.fabricmc:yarn:$yarnMappings:v2")
-    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
-
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_config_version")}")
     modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
