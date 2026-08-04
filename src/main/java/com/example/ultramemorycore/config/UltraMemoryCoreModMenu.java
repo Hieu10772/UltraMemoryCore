@@ -21,6 +21,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
             ConfigBuilder builder = ConfigBuilder.create()
                     .setParentScreen(parent)
                     .setTitle(Text.literal("UltraMemoryCore Settings"));
+             builder.setSavingRunnable(config::save);
 
             ConfigCategory category = builder.getOrCreateCategory(
                     Text.literal("General")
@@ -73,6 +74,18 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     .setSaveConsumer(value -> {
     config.setMemoryProfile(value);
     config.save();
+
+    net.minecraft.client.MinecraftClient client =
+            net.minecraft.client.MinecraftClient.getInstance();
+
+    client.execute(() -> {
+        // đóng màn hình hiện tại
+        client.setScreen(null);
+
+        // mở lại màn hình config với profile mới
+        client.setScreen(getModConfigScreenFactory().create(parent));
+    });
+})
 
     net.minecraft.client.MinecraftClient client =
             net.minecraft.client.MinecraftClient.getInstance();
