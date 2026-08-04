@@ -62,15 +62,22 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                         }
                         return Text.literal("Custom");
                     })
-                    .setTooltipSupplier(profile -> java.util.Optional.of(
-        new Text[] {
-                Text.literal("Palette Cache: " + profile.getMaxPaletteCache()),
-                Text.literal("Upload Buffer: "
-                        + (profile.getMaxUploadBufferSize() / 1024) + " KB"),
-                Text.literal("Cache Keep Time: "
-                        + profile.getPoolTimeoutMs() + " ms")
-        }
-))
+                                        .setTooltipSupplier(profile -> {
+                        if (profile == MemoryProfile.CUSTOM) {
+                            return java.util.Optional.of(new Text[]{
+                                    Text.literal("Enable custom memory settings."),
+                                    Text.literal("Press Save & Quit to show the custom options.")
+                            });
+                        }
+
+                        return java.util.Optional.of(new Text[]{
+                                Text.literal("Palette Cache: " + profile.getMaxPaletteCache()),
+                                Text.literal("Upload Buffer: "
+                                        + (profile.getMaxUploadBufferSize() / 1024) + " KB"),
+                                Text.literal("Cache Keep Time: "
+                                        + profile.getPoolTimeoutMs() + " ms")
+                        });
+                    })
                     .setSaveConsumer(value -> {
     config.setMemoryProfile(value);
     config.save();
