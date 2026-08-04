@@ -40,27 +40,34 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     })
                     .build());
 
-            // Device profile
+                        // Device profile
             category.addEntry(entryBuilder.startEnumSelector(
                             Text.literal("Device Profile"),
                             MemoryProfile.class,
                             config.getMemoryProfile()
                     )
-                                .setEnumNameProvider(profile -> {
-                if (profile == MemoryProfile.AUTO) {
-                    return Text.literal("Auto");
-                }
-                if (profile == MemoryProfile.DESKTOP) {
-                    return Text.literal("Desktop");
-                }
-                if (profile == MemoryProfile.LOW_RAM_ANDROID) {
-                    return Text.literal("Android");
-                }
-                if (profile == MemoryProfile.IOS_POJAV) {
-                    return Text.literal("Ios");
-                }
-                return Text.literal("Custom");
-            })
+                    .setEnumNameProvider(profile -> {
+                        if (profile == MemoryProfile.AUTO) {
+                            return Text.literal("Auto");
+                        }
+                        if (profile == MemoryProfile.DESKTOP) {
+                            return Text.literal("Desktop");
+                        }
+                        if (profile == MemoryProfile.LOW_RAM_ANDROID) {
+                            return Text.literal("Android");
+                        }
+                        if (profile == MemoryProfile.IOS_POJAV) {
+                            return Text.literal("iOS");
+                        }
+                        return Text.literal("Custom");
+                    })
+                    .setTooltipSupplier(profile -> java.util.List.of(
+                            Text.literal("Palette Cache: " + profile.getMaxPaletteCache()),
+                            Text.literal("Upload Buffer: "
+                                    + (profile.getMaxUploadBufferSize() / 1024) + " KB"),
+                            Text.literal("Cache Keep Time: "
+                                    + profile.getPoolTimeoutMs() + " ms")
+                    ))
                     .setSaveConsumer(value -> {
                         config.setMemoryProfile(value);
                         config.save();
@@ -112,25 +119,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                             config.save();
                         })
                         .build());
-
-            } else {
-
-                MemoryProfile profile = config.getMemoryProfile();
-
-                category.addEntry(entryBuilder.startTextDescription(
-                        Text.literal("Palette Cache: " + profile.getMaxPaletteCache())
-                ).build());
-
-                category.addEntry(entryBuilder.startTextDescription(
-                        Text.literal("Upload Buffer: " +
-                                (profile.getMaxUploadBufferSize() / 1024) + " KB")
-                ).build());
-
-                category.addEntry(entryBuilder.startTextDescription(
-                        Text.literal("Cache Keep Time: " +
-                                profile.getPoolTimeoutMs() + " ms")
-                ).build());
-            }
+                        } 
 
             return builder.build();
         };
