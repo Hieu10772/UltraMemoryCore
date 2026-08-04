@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("fabric-loom") version "1.11-SNAPSHOT"
+    id("fabric-loom") version "1.12-SNAPSHOT"
 }
 
 version = project.property("mod_version") as String
@@ -18,32 +18,31 @@ repositories {
 }
 
 dependencies {
-    val minecraftVersion = project.property("minecraft_version") as String
-    val yarnMappings = project.property("yarn_mappings") as String
-    val loaderVersion = project.property("loader_version") as String
-    val fabricVersion = project.property("fabric_version") as String
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
 
-    minecraft("com.mojang:minecraft:$minecraftVersion")
-    mappings("net.fabricmc:yarn:$yarnMappings:v2")
-    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
-
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_config_version")}")
     modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
-    // Explicit dependencies for standalone benchmark and future optimization code
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
 }
 
+loom {
+    mappings {
+        officialMojangMappings()
+    }
+}
+
 tasks.withType<JavaCompile>().configureEach {
-    options.release.set(21)
+    options.release.set(25))
     options.encoding = "UTF-8"
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     withSourcesJar()
 }
 
