@@ -67,14 +67,70 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     })
                     .build());
 
-            boolean custom = config.getMemoryProfile() == MemoryProfile.CUSTOM;
+                        boolean custom = config.getMemoryProfile() == MemoryProfile.CUSTOM;
 
-if (!custom) {
-    // chỉ hiển thị mô tả thay vì cho nhập số
-    category.addEntry(entryBuilder.startTextDescription(
-            Text.literal("Custom values are only editable when Device Profile = Custom")
-    ).build());
-}
+            if (custom) {
+
+                // Max palette cache
+                category.addEntry(entryBuilder.startIntField(
+                                Text.literal("Max Palette Cache"),
+                                config.getCustomMaxPaletteCache()
+                        )
+                        .setDefaultValue(128)
+                        .setMin(32)
+                        .setMax(2048)
+                        .setSaveConsumer(value -> {
+                            config.setCustomMaxPaletteCache(value);
+                            config.save();
+                        })
+                        .build());
+
+                // Upload buffer (KB)
+                category.addEntry(entryBuilder.startIntField(
+                                Text.literal("Max Upload Buffer (KB)"),
+                                config.getCustomMaxUploadBufferSize() / 1024
+                        )
+                        .setDefaultValue(512)
+                        .setMin(64)
+                        .setMax(8192)
+                        .setSaveConsumer(value -> {
+                            config.setCustomMaxUploadBufferSize(value * 1024);
+                            config.save();
+                        })
+                        .build());
+
+                // Cache timeout
+                category.addEntry(entryBuilder.startLongField(
+                                Text.literal("Cache Keep Time (ms)"),
+                                config.getCustomPoolTimeoutMs()
+                        )
+                        .setDefaultValue(30000L)
+                        .setMin(5000L)
+                        .setMax(600000L)
+                        .setSaveConsumer(value -> {
+                            config.setCustomPoolTimeoutMs(value);
+                            config.save();
+                        })
+                        .build());
+
+            } else {
+
+                MemoryProfile profile = config.getMemoryProfile();
+
+                category.addEntry(entryBuilder.startTextDescription(
+                        Text.literal("Palette Cache: " + profile.getMaxPaletteCache())
+                ).build());
+
+                category.addEntry(entryBuilder.startTextDescription(
+                        Text.literal("Upload Buffer: " +
+                                (profile.getMaxUploadBufferSize() / 1024) + " KB")
+                ).build());
+
+                category.addEntry(entryBuilder.startTextDescription(
+                        Text.literal("Cache Keep Time: " +
+                                profile.getPoolTimeoutMs() + " ms")
+                ).build());
+            }
 
             // Max palette cache
             category.addEntry(entryBuilder.startIntField(
