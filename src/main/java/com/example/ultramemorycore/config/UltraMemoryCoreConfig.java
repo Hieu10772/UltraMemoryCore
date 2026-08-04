@@ -1,8 +1,24 @@
 package com.example.ultramemorycore.config;
 
 import com.example.ultramemorycore.memory.MemoryProfile;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public final class UltraMemoryCoreConfig {
+
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
+
+    private static final Path CONFIG_PATH =
+            FabricLoader.getInstance()
+                    .getConfigDir()
+                    .resolve("ultramemorycore.json");
 
     private boolean enabled = true;
 
@@ -53,9 +69,27 @@ public final class UltraMemoryCoreConfig {
     }
 
     public static UltraMemoryCoreConfig load() {
-        return new UltraMemoryCoreConfig();
+        try {
+            if (Files.exists(CONFIG_PATH)) {
+                String json = Files.readString(CONFIG_PATH);
+                UltraMemoryCoreConfig config = GSON.fromJson(json, UltraMemoryCoreConfig.class);
+                return config != null ? config : new UltraMemoryCoreConfig();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        UltraMemoryCoreConfig config = new UltraMemoryCoreConfig();
+        config.save();
+        return config;
     }
 
     public void save() {
+        try {
+            Files.createDirectories(CONFIG_PATH.getParent());
+            Files.writeString(CONFIG_PATH, GSON.toJson(this));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
