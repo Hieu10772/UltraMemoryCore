@@ -57,7 +57,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     return Text.literal("Android");
                 }
                 if (profile == MemoryProfile.IOS_POJAV) {
-                    return Text.literal("iOS / Pojav");
+                    return Text.literal("Ios");
                 }
                 return Text.literal("Custom");
             })
