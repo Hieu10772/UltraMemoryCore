@@ -132,54 +132,6 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                 ).build());
             }
 
-            // Max palette cache
-            category.addEntry(entryBuilder.startIntField(
-                            Text.literal("Max Palette Cache"),
-                            config.getCustomMaxPaletteCache()
-                    )
-                    .setDefaultValue(128)
-                    .setMin(32)
-                    .setMax(2048)
-                    .setSaveConsumer(value -> {
-                        if (custom) {
-                            config.setCustomMaxPaletteCache(value);
-                            config.save();
-                        }
-                    })
-                    .build());
-
-            // Upload buffer (KB)
-            category.addEntry(entryBuilder.startIntField(
-                            Text.literal("Max Upload Buffer (KB)"),
-                            config.getCustomMaxUploadBufferSize() / 1024
-                    )
-                    .setDefaultValue(512)
-                    .setMin(64)
-                    .setMax(8192)
-                    .setSaveConsumer(value -> {
-                        if (custom) {
-                            config.setCustomMaxUploadBufferSize(value * 1024);
-                            config.save();
-                        }
-                    })
-                    .build());
-
-            // Cache timeout
-            category.addEntry(entryBuilder.startLongField(
-                            Text.literal("Cache Keep Time (ms)"),
-                            config.getCustomPoolTimeoutMs()
-                    )
-                    .setDefaultValue(30000L)
-                    .setMin(5000L)
-                    .setMax(600000L)
-                    .setSaveConsumer(value -> {
-                        if (custom) {
-                            config.setCustomPoolTimeoutMs(value);
-                            config.save();
-                        }
-                    })
-                    .build());
-
             return builder.build();
         };
     }
