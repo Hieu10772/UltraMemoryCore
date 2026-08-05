@@ -1,0 +1,20 @@
+plugins {
+    id 'ultramemorycore.loader-conventions'
+    id 'net.fabricmc.fabric-loom'
+}
+
+dependencies {
+    minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
+    implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
+    modImplementation group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: fabric_version
+
+    implementation project(':Common')
+}
+
+compileJava {
+    source project(':Common').sourceSets.main.allSource
+}
+
+processResources {
+    from project(':Common').sourceSets.main.resources
+}
