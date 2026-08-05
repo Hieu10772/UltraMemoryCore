@@ -1,10 +1,10 @@
 plugins {
-    id("java")
+    java
     id("fabric-loom") version "1.17-SNAPSHOT"
 }
 
-version = project.property("mod_version") as String
-group = project.property("mod_group") as String
+version = property("mod_version") as String
+group = property("mod_group") as String
 
 repositories {
     mavenCentral()
@@ -14,45 +14,39 @@ repositories {
 }
 
 dependencies {
-    val mc = property("minecraft_version") as String
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
 
-    minecraft("com.mojang:minecraft:$mc")
+    // KHÔNG thêm mappings(...)
 
-    mappings(
-    loom.layered {
-        officialMojangMappings()
-    }
-)
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
-    modImplementation(
-        "net.fabricmc:fabric-loader:${property("loader_version")}"
-    )
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_config_version")}")
+    modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
+
+    implementation("com.google.code.gson:gson:2.13.1")
+    implementation("it.unimi.dsi:fastutil:8.5.18")
 }
+
 loom {
     runs {
         named("client") {
-            client()
-            configName = "Fabric Client"
-            ideConfigGenerated(true)
-            runDir("run")
+            ideConfigGenerated(false)
         }
         named("server") {
-            server()
-            configName = "Fabric Server"
-            ideConfigGenerated(true)
-            runDir("run")
+            ideConfigGenerated(false)
         }
     }
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.release.set(25)
-    options.encoding = "UTF-8"
 }
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     withSourcesJar()
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(25)
+    options.encoding = "UTF-8"
 }
 
 tasks.processResources {
@@ -62,8 +56,8 @@ tasks.processResources {
         expand(
             mapOf(
                 "version" to project.version,
-                "minecraft_version" to project.property("minecraft_version"),
-                "loader_version" to project.property("loader_version")
+                "minecraft_version" to property("minecraft_version"),
+                "loader_version" to property("loader_version")
             )
         )
     }
@@ -73,12 +67,4 @@ tasks.jar {
     from("LICENSE") {
         rename { "${it}_${project.name}" }
     }
-}
-
-tasks.register<JavaExec>("runBenchmark") {
-    group = "benchmark"
-    description = "Runs the standalone UltraMemoryCore memory allocation benchmark."
-
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("com.example.ultramemorycore.util.MemoryBenchmark")
 }
