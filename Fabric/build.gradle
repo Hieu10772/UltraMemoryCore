@@ -1,20 +1,26 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
     id 'ultramemorycore.loader-conventions'
-}
-
-repositories {
-    maven { url 'https://maven.fabricmc.net/' }
-    mavenCentral()
+    id 'net.fabricmc.fabric-loom'
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
+    minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
+    implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
+}
 
-    mappings "net.fabricmc:intermediary:${minecraft_version}:v2"
-
-    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-
-    implementation project(':Common')
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
 }
