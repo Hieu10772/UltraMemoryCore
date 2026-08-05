@@ -8,11 +8,8 @@ buildscript {
     }
 }
 
-plugins {
-    id 'ultramemorycore.loader-conventions'
-}
-
 apply plugin: 'net.fabricmc.fabric-loom'
+apply plugin: 'ultramemorycore.loader-conventions'
 
 repositories {
     maven { url 'https://maven.fabricmc.net/' }
