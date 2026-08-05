@@ -1,22 +1,19 @@
 plugins {
-    id 'java-library'
+    id 'java'
+    id 'idea'
 }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 repositories {
     mavenCentral()
-    maven {
-        url = 'https://maven.fabricmc.net/'
-    }
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
-    withSourcesJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.release = 25
     options.encoding = 'UTF-8'
+    options.release = 25
+}
+
+tasks.withType(GenerateModuleMetadata).configureEach {
+    enabled = false
 }
