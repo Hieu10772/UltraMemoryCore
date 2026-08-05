@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("fabric-loom") version "1.12-SNAPSHOT"
+    id("fabric-loom") version "1.17-SNAPSHOT"
 }
 
 version = project.property("mod_version") as String
