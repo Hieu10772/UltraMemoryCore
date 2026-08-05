@@ -1,6 +1,13 @@
 plugins {
-    id 'ultramemorycore.loader-conventions'
     id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
+    id 'ultramemorycore.loader-conventions'
+}
+
+repositories {
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.terraformersmc.com/releases/' }
+    maven { url 'https://maven.shedaniel.me/' }
+    mavenCentral()
 }
 
 dependencies {
@@ -22,15 +29,15 @@ loom {
     runs {
         client {
             client()
-            setConfigName("Fabric Client")
+            setConfigName('Fabric Client')
             ideConfigGenerated(true)
-            runDir("run")
+            runDir('run')
         }
         server {
             server()
-            setConfigName("Fabric Server")
+            setConfigName('Fabric Server')
             ideConfigGenerated(true)
-            runDir("run")
+            runDir('run')
         }
     }
 }
