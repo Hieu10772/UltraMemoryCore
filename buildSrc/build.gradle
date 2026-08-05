@@ -9,7 +9,3 @@ repositories {
     gradlePluginPortal()
     mavenCentral()
 }
-
-dependencies {
-    implementation 'net.fabricmc:fabric-loom:1.17-SNAPSHOT'
-}
