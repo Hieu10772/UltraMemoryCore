@@ -22,7 +22,8 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
 
-    mappings loom.officialMojangMappings()
+    // Dùng intermediary thay vì Mojang mappings
+    mappings "net.fabricmc:intermediary:${minecraft_version}:v2"
 
     modImplementation "net.fabricmc:fabric-loader:${loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
