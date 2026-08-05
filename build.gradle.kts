@@ -17,24 +17,21 @@ repositories {
     maven("https://maven.shedaniel.me/")
 }
 
+val minecraft_version: String by project
+val loader_version: String by project
+val fabric_version: String by project
+val cloth_config_version: String by project
+val modmenu_version: String by project
+
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    minecraft("com.mojang:minecraft:$minecraft_version")
+    mappings("net.fabricmc:intermediary:$minecraft_version:v2")
 
-    mappings("net.fabricmc:intermediary:$minecraftVersion:v2")
+    modImplementation("net.fabricmc:fabric-loader:$loader_version")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
 
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
-
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_config_version")}")
-    modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
-
-    implementation("com.google.code.gson:gson:2.13.1")
-    implementation("it.unimi.dsi:fastutil:8.5.18")
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.release.set(25)
-    options.encoding = "UTF-8"
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version")
+    modImplementation("com.terraformersmc:modmenu:$modmenu_version")
 }
 
 java {
