@@ -14,15 +14,16 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    val mc = property("minecraft_version") as String
 
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+    minecraft("com.mojang:minecraft:$mc")
 
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_config_version")}")
-    modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
+    mappings(loom.officialMojangMappings())
+
+    modImplementation(
+        "net.fabricmc:fabric-loader:${property("fabric_loader_version")}"
+    )
 }
-
 loom {
     runs {
         named("client") {
