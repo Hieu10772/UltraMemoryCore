@@ -18,10 +18,7 @@ dependencies {
 
     minecraft("com.mojang:minecraft:$mc")
 
-    // Dùng layered mappings thay vì mappings(...)
-    mappings(loom.layered {
-        intermediary("net.fabricmc:intermediary:$mc:v2")
-    })
+    mappings("net.fabricmc:intermediary:$mc:v2")
 
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
