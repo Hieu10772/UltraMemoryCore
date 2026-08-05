@@ -14,9 +14,10 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    val mc = property("minecraft_version") as String
 
-    // KHÔNG thêm mappings(...)
+    minecraft("com.mojang:minecraft:$mc")
+    mappings(loom.officialMojangMappings())
 
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
@@ -26,17 +27,6 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
-}
-
-loom {
-    runs {
-        named("client") {
-            ideConfigGenerated(false)
-        }
-        named("server") {
-            ideConfigGenerated(false)
-        }
-    }
 }
 
 java {
