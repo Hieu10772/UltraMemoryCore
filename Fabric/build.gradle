@@ -5,7 +5,17 @@ plugins {
 
 dependencies {
     minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
+
     implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
+
+    modImplementation group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: fabric_version
+    modImplementation group: 'me.shedaniel.cloth', name: 'cloth-config-fabric', version: cloth_config_version
+    modImplementation group: 'com.terraformersmc', name: 'modmenu', version: modmenu_version
+
+    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'it.unimi.dsi:fastutil:8.5.18'
+
+    implementation project(':Common')
 }
 
 loom {
