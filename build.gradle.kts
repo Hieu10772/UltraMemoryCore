@@ -18,7 +18,9 @@ dependencies {
 
     minecraft("com.mojang:minecraft:$mc")
 
-    mappings(loom.officialMojangMappings())
+    mappings(loom.layered {
+        intermediaryMinecraft(mc)
+    })
 
     modImplementation(
         "net.fabricmc:fabric-loader:${property("loader_version")}"
