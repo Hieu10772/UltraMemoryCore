@@ -1,7 +1,3 @@
-plugins {
-    id 'ultramemorycore.loader-conventions'
-}
-
 buildscript {
     repositories {
         maven { url 'https://maven.fabricmc.net/' }
@@ -10,6 +6,10 @@ buildscript {
     dependencies {
         classpath 'net.fabricmc:fabric-loom:1.17-SNAPSHOT'
     }
+}
+
+plugins {
+    id 'ultramemorycore.loader-conventions'
 }
 
 apply plugin: 'net.fabricmc.fabric-loom'
