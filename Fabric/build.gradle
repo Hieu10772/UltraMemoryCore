@@ -1,7 +1,16 @@
-plugins {
-    id 'ultramemorycore.loader-conventions'
-    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabricmc.net/' }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.fabricmc:fabric-loom:1.17-SNAPSHOT'
+    }
 }
+
+apply plugin: 'ultramemorycore.loader-conventions'
+apply plugin: 'net.fabricmc.fabric-loom'
 
 repositories {
     maven { url 'https://maven.fabricmc.net/' }
@@ -11,6 +20,7 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
 
+    // 26.2 là phiên bản snapshot-style của bạn
     mappings "net.fabricmc:intermediary:${minecraft_version}:v2"
 
     modImplementation "net.fabricmc:fabric-loader:${loader_version}"
