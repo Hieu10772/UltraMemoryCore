@@ -21,7 +21,7 @@ dependencies {
     mappings(loom.officialMojangMappings())
 
     modImplementation(
-        "net.fabricmc:fabric-loader:${property("fabric_loader_version")}"
+        "net.fabricmc:fabric-loader:${property("loader_version")}"
     )
 }
 loom {
