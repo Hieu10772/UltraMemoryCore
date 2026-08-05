@@ -1,15 +1,12 @@
 name: Build UltraMemoryCore
 
 on:
-  # Tự động build khi push lên BẤM KỲ nhánh nào
   push:
     branches:
       - '**'
-  # Tự động build khi tạo Pull Request
   pull_request:
     branches:
       - '**'
-  # Giữ lại tùy chọn này để nếu muốn bấm tay vẫn bấm được
   workflow_dispatch:
 
 jobs:
@@ -20,10 +17,10 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up JDK 25
+    - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
-        java-version: '25'
+        java-version: '21'
         distribution: 'temurin'
 
     - name: Setup Gradle
