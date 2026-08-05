@@ -9,25 +9,18 @@ group = project.property("mod_group") as String
 repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
-
-    // ModMenu
     maven("https://maven.terraformersmc.com/releases/")
-
-    // Cloth Config
     maven("https://maven.shedaniel.me/")
 }
 
-val minecraft_version: String by project
-val loader_version: String by project
-val fabric_version: String by project
-val cloth_config_version: String by project
-val modmenu_version: String by project
-
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    val mc = property("minecraft_version") as String
 
+    minecraft("com.mojang:minecraft:$mc")
+
+    // Dùng layered mappings thay vì mappings(...)
     mappings(loom.layered {
-        officialMojangMappings()
+        intermediary("net.fabricmc:intermediary:$mc:v2")
     })
 
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
@@ -38,6 +31,11 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(25)
+    options.encoding = "UTF-8"
 }
 
 java {
