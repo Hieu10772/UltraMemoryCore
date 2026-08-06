@@ -17,28 +17,16 @@ jobs:
           ref: port-26.2
           fetch-depth: 0
 
-      - name: Show current branch
+      - name: Fetch source branch
         run: |
-          git branch --show-current
-          git branch -a
+          git fetch origin 1.21.11
 
-      - name: Restore source folders from 1.21.11
+      - name: Restore source folders
         run: |
-          git checkout 1.21.11 -- Common/src/main/java
-          git checkout 1.21.11 -- Fabric/src/main
-          git checkout 1.21.11 -- src/main
-          git checkout 1.21.11 -- src/client
-
-      - name: Show restored files
-        run: |
-          echo "=== Common ==="
-          find Common/src/main/java -type f | head -20 || true
-
-          echo "=== Fabric ==="
-          find Fabric/src/main -type f | head -20 || true
-
-          echo "=== Root src ==="
-          find src/main -type f | head -20 || true
+          git checkout origin/1.21.11 -- Common/src/main/java
+          git checkout origin/1.21.11 -- Fabric/src/main
+          git checkout origin/1.21.11 -- src/main
+          git checkout origin/1.21.11 -- src/client
 
       - name: Commit and push
         run: |
