@@ -6,6 +6,10 @@ plugins {
 dependencies {
     minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
 
+    mappings loom.layered {
+        officialMojangMappings()
+    }
+
     implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
 
     implementation project(':Common')
