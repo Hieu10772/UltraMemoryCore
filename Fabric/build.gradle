@@ -1,6 +1,6 @@
 plugins {
     id 'ultramemorycore.loader-conventions'
-    id 'net.fabricmc.fabric-loom'
+    id 'fabric-loom'
 }
 
 dependencies {
