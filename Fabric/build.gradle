@@ -39,8 +39,6 @@ dependencies {
 }
 
 loom {
-    silentMojangMappingsLicense()
-
     runs {
         client {
             client()
