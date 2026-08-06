@@ -3,9 +3,11 @@ plugins {
 }
 
 repositories {
-    maven {
-        url = 'https://maven.fabricmc.net/'
-    }
+    maven { url 'https://maven.fabricmc.net/' }
     gradlePluginPortal()
     mavenCentral()
+}
+
+dependencies {
+    implementation 'net.fabricmc:fabric-loom:1.17.12'
 }
