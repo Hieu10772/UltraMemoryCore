@@ -11,14 +11,16 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout target branch
         uses: actions/checkout@v4
         with:
+          ref: port-26.2
           fetch-depth: 0
 
-      - name: Switch to target branch
+      - name: Show current branch
         run: |
-          git checkout 26.2
+          git branch --show-current
+          git branch -a
 
       - name: Restore source folders from 1.21.11
         run: |
@@ -45,6 +47,6 @@ jobs:
 
           git add Common/src/main/java Fabric/src/main src/main src/client
 
-          git commit -m "Restore Java source from branch 1.21.11" || echo "No changes to commit"
+          git commit -m "Restore source from 1.21.11 into port-26.2" || echo "No changes to commit"
 
-          git push origin 26.2
+          git push origin port-26.2
