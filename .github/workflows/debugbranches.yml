@@ -1,0 +1,34 @@
+name: Debug branches
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch all branches
+        run: |
+          git fetch --all --prune
+
+      - name: Show current branch
+        run: |
+          echo "Current branch: $GITHUB_REF_NAME"
+
+      - name: Show all local branches
+        run: |
+          git branch
+
+      - name: Show all remote branches
+        run: |
+          git branch -r
+
+      - name: Show all refs
+        run: |
+          git branch -a
