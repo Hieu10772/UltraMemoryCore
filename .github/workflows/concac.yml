@@ -24,18 +24,18 @@ jobs:
 
       - name: Recreate folders
         run: |
-          mkdir -p Common/src/main/java/com/example
-          mkdir -p Fabric/src/main/java/com/example
+          mkdir -p Common/src/main/java/com/ultramemorycore
+          mkdir -p Fabric/src/main/java/com/ultramemorycore
 
       - name: Copy ONLY ultramemorycore package to Common
         run: |
-          cp -r src/main/java/com/example/ultramemorycore \
-                Common/src/main/java/com/example/
+          cp -r src/main/java/com/ultramemorycore/ultramemorycore \
+                Common/src/main/java/com/ultramemorycore/
 
       - name: Copy ONLY ultramemorycore package to Fabric
         run: |
-          cp -r src/main/java/com/example/ultramemorycore \
-                Fabric/src/main/java/com/example/
+          cp -r src/main/java/com/ultramemorycore/ultramemorycore \
+                Fabric/src/main/java/com/ultramemorycore/
 
       - name: Verify
         run: |
@@ -52,6 +52,6 @@ jobs:
 
           git add Common/src/main/java Fabric/src/main/java
 
-          git commit -m "Sync ONLY ultramemorycore package" || echo "No changes"
+          git commit -m "Sync ultramemorycore package only" || echo "No changes"
 
           git push origin port-26.2
