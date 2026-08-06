@@ -1,56 +1,57 @@
-name: Copy root src into Fabric
+name: Sync UltraMemoryCore only
 
 on:
   workflow_dispatch:
 
 jobs:
-  copy:
+  sync:
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: port-26.2
           fetch-depth: 0
 
-      - name: Create Fabric target folder
+      - name: Remove old Java sources
         run: |
-          mkdir -p Fabric/src/main/java
+          rm -rf Common/src/main/java
+          rm -rf Fabric/src/main/java
 
-      - name: Copy root src/main/java into Fabric
+      - name: Recreate folders
         run: |
-          if [ -d src/main/java ]; then
-            echo "Copying root src/main/java -> Fabric/src/main/java"
-            cp -r src/main/java/. Fabric/src/main/java/
-          else
-            echo "Root src/main/java not found"
-          fi
+          mkdir -p Common/src/main/java/com/example
+          mkdir -p Fabric/src/main/java/com/example
 
-      - name: Copy optional client sources into Fabric
+      - name: Copy ONLY ultramemorycore package to Common
         run: |
-          if [ -d src/client/java ]; then
-            echo "Copying src/client/java -> Fabric/src/main/java"
-            cp -r src/client/java/. Fabric/src/main/java/
-          else
-            echo "No src/client/java folder"
-          fi
+          cp -r src/main/java/com/example/ultramemorycore \
+                Common/src/main/java/com/example/
 
-      - name: Show copied files
+      - name: Copy ONLY ultramemorycore package to Fabric
         run: |
+          cp -r src/main/java/com/example/ultramemorycore \
+                Fabric/src/main/java/com/example/
+
+      - name: Verify
+        run: |
+          echo "=== Common ==="
+          find Common/src/main/java -type f | sort
+
           echo "=== Fabric ==="
-          find Fabric/src/main/java -type f | head -50 || true
+          find Fabric/src/main/java -type f | sort
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add Fabric/src/main/java
+          git add Common/src/main/java Fabric/src/main/java
 
-          git diff --cached --quiet || git commit -m "Move root src into Fabric module"
+          git commit -m "Sync ONLY ultramemorycore package" || echo "No changes"
 
           git push origin port-26.2
