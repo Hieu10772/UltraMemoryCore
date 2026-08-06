@@ -1,16 +1,26 @@
 plugins {
     id 'ultramemorycore.loader-conventions'
-    id 'fabric-loom'
+    id 'net.fabricmc.fabric-loom' version '1.17.12'
+}
+
+repositories {
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.terraformersmc.com/releases/' }
+    mavenCentral()
 }
 
 dependencies {
     minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
 
-    mappings loom.layered {
-        officialMojangMappings()
-    }
-
+    // 26.x uses unobfuscated Loom
     implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
+    implementation group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: fabric_version
+
+    compileOnly group: 'com.terraformersmc', name: 'modmenu', version: modmenu_version
+    runtimeOnly group: 'com.terraformersmc', name: 'modmenu', version: modmenu_version
+
+    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'it.unimi.dsi:fastutil:8.5.18'
 
     implementation project(':Common')
 }
