@@ -1,39 +1,12 @@
 plugins {
-    id 'java-library'
-    id 'fabric-loom' version '1.17.12'
-}
-
-repositories {
-    maven { url 'https://maven.fabricmc.net/' }
-    maven { url 'https://maven.terraformersmc.com/releases/' }
-    mavenCentral()
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
-    withSourcesJar()
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.release = 25
-    options.encoding = 'UTF-8'
+    id 'ultramemorycore.loader-conventions'
+    id 'net.fabricmc.fabric-loom'
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
+    minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
 
-    mappings loom.officialMojangMappings()
-
-    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-
-    modCompileOnly "com.terraformersmc:modmenu:${modmenu_version}"
-    modLocalRuntime "com.terraformersmc:modmenu:${modmenu_version}"
-
-    implementation 'com.google.code.gson:gson:2.13.1'
-    implementation 'it.unimi.dsi:fastutil:8.5.18'
+    implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
 
     implementation project(':Common')
 }
@@ -42,11 +15,11 @@ loom {
     runs {
         client {
             client()
-            runDir = 'run'
+            runDir('run')
         }
         server {
             server()
-            runDir = 'run'
+            runDir('run')
         }
     }
 }
