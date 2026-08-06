@@ -1,21 +1,11 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabricmc.net/' }
-        gradlePluginPortal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.fabricmc:fabric-loom:1.17-SNAPSHOT'
-    }
+plugins {
+    id 'java-library'
+    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
 }
-
-apply plugin: 'java-library'
-apply plugin: 'net.fabricmc.fabric-loom'
 
 repositories {
     maven { url 'https://maven.fabricmc.net/' }
     maven { url 'https://maven.terraformersmc.com/releases/' }
-    maven { url 'https://maven.shedaniel.me/' }
     mavenCentral()
 }
 
@@ -45,7 +35,10 @@ dependencies {
 
     implementation project(':Common')
 }
+
 loom {
+    silentMojangMappingsLicense()
+
     runs {
         client {
             client()
