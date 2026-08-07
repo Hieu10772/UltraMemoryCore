@@ -7,12 +7,6 @@ repositories {
     maven { url 'https://maven.fabricmc.net/' }
 }
 
-pluginManager.withPlugin('net.fabricmc.fabric-loom') {
-    dependencies {
-        mappings loom.officialMojangMappings()
-    }
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
