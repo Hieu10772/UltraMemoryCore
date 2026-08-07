@@ -10,29 +10,37 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
+    minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
 
-    implementation "net.fabricmc:fabric-loader:${loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
 
-    implementation "com.google.code.gson:gson:2.13.1"
-    implementation "it.unimi.dsi:fastutil:8.5.18"
+    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'it.unimi.dsi:fastutil:8.5.18'
 
-    compileOnly "com.terraformersmc:modmenu:${modmenu_version}"
-    runtimeOnly "com.terraformersmc:modmenu:${modmenu_version}"
+    compileOnly group: 'com.terraformersmc', name: 'modmenu', version: modmenu_version
+    runtimeOnly group: 'com.terraformersmc', name: 'modmenu', version: modmenu_version
 
-    implementation project(":Common")
+    implementation project(':Common')
 }
 
 loom {
     runs {
         client {
             client()
-            runDir('run')
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
         }
         server {
             server()
-            runDir('run')
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
         }
     }
+}
+
+def customGradle = project.file('custom.gradle')
+if (customGradle.exists()) {
+    apply from: customGradle
 }
