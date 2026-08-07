@@ -7,8 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class VoxelShapeCache {
 
-    private static final ConcurrentHashMap<Integer, WeakReference<VoxelShape>> CACHE =
-            new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Integer, WeakReference<VoxelShape>> CACHE = 
+    new ConcurrentHashMap<Integer, WeakReference<VoxelShape>>();
+
 
     // Giới hạn để chống phình khi bay Elytra
     private static final int MAX_ENTRIES = 2048;
