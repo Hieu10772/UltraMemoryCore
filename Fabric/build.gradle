@@ -1,3 +1,4 @@
+```groovy
 plugins {
     id 'ultramemorycore.loader-conventions'
     id 'net.fabricmc.fabric-loom'
@@ -14,9 +15,7 @@ dependencies {
 
     implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
 
-    implementation 'com.google.code.gson:gson:2.13.1'
-    implementation 'it.unimi.dsi:fastutil:8.5.18'
-
+    // Mod Menu
     compileOnly group: 'com.terraformersmc', name: 'modmenu', version: modmenu_version
     runtimeOnly group: 'com.terraformersmc', name: 'modmenu', version: modmenu_version
 
@@ -27,20 +26,26 @@ loom {
     runs {
         client {
             client()
-            setConfigName("Fabric Client")
+            setConfigName('Fabric Client')
             ideConfigGenerated(true)
-            runDir("run")
+            runDir('run')
         }
         server {
             server()
-            setConfigName("Fabric Server")
+            setConfigName('Fabric Server')
             ideConfigGenerated(true)
-            runDir("run")
+            runDir('run')
         }
     }
 }
 
-def customGradle = project.file('custom.gradle')
-if (customGradle.exists()) {
-    apply from: customGradle
+// Lấy source từ Common giống FerriteCore
+compileJava {
+    source(project(':Common').sourceSets.main.allSource)
 }
+
+processResources {
+    from project(':Common').sourceSets.main.output.resourcesDir
+    dependsOn project(':Common').processResources
+}
+```
