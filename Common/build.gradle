@@ -14,19 +14,6 @@ java {
     withSourcesJar()
 }
 
-loom {
-    // Ép Loom tạo ra các variant (bao gồm namedElements / remapped) cho subproject khác dùng
-    createRemappedVariants = true
-}
-
-// Đảm bảo các configuration chính của Common được xuất ra rõ ràng
-configurations {
-    commonJava {
-        canBeResolved = false
-        canBeConsumed = true
-    }
-}
-
 dependencies {
     minecraft "com.mojang:minecraft:26.2"
 }
