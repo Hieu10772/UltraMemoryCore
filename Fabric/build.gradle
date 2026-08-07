@@ -1,3 +1,5 @@
+evaluationDependsOn(':Common')
+
 plugins {
     id 'ultramemorycore.loader-conventions'
     id 'net.fabricmc.fabric-loom'
