@@ -12,13 +12,15 @@ repositories {
 }
 
 dependencies {
+    // 1. Minecraft
     minecraft "com.mojang:minecraft:26.2"
 
-    // Dùng loom.modImplementation để tránh lỗi method missing
-    loom.modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    loom.modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    loom.modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    // 2. Fabric & ModMenu (Sử dụng string configuration name)
+    "modImplementation" "net.fabricmc:fabric-loader:${project.loader_version}"
+    "modImplementation" "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    "modImplementation" "com.terraformersmc:modmenu:${project.modmenu_version}"
 
+    // 3. Subproject Common
     implementation project(':Common')
 }
 
