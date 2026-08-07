@@ -7,8 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class UltraFastPropertyMap {
 
-    private static final ConcurrentHashMap<PropertyKey, Map<Property<?>, Comparable<?>>> INTERN =
-            new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<PropertyKey, Map<Property<?>, Comparable<?>>> INTERN = 
+    new ConcurrentHashMap<PropertyKey, Map<Property<?>, Comparable<?>>>();
 
     private static final int MAX_ENTRIES = 4096;
 
