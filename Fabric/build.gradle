@@ -21,7 +21,7 @@ dependencies {
     implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     // 3. Liên kết module Common
-    implementation project(path: ':Common', configuration: 'namedElements')
+    implementation project(':Common')
 }
 
 loom {
