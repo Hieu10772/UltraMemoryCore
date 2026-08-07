@@ -10,17 +10,16 @@ repositories {
 }
 
 dependencies {
-    // 1. Minecraft & Fabric Loader
+    // Nếu Gradle báo lỗi không tìm thấy modImplementation,
+    // hãy dùng configurations.modImplementation hoặc thêm trực tiếp theo cú pháp chuẩn của Loom:
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    
+    // Khai báo dependencies mod
+    "modImplementation"("net.fabricmc:fabric-loader:${project.loader_version}")
+    "modImplementation"("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+    "modImplementation"("com.terraformersmc:modmenu:${project.modmenu_version}")
 
-    // 2. Thêm Fabric API (Bắt buộc để giải quyết các import net.fabricmc.fabric.api.*)
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    // 3. Thêm ModMenu (Bắt buộc để giải quyết các import com.terraformersmc.modmenu.api.*)
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-
-    // 4. Liên kết với module Common
+    // Liên kết module Common
     implementation project(path: ':Common', configuration: 'namedElements')
 }
 
