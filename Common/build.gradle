@@ -2,19 +2,23 @@ plugins {
     id 'java-library'
 }
 
-group = 'com.example.ultramemorycore'
-version = '1.0.0'
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.fabricmc.net/' }
+}
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
     }
+    withSourcesJar()
 }
 
-repositories {
-    mavenCentral()
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
 }
 
-dependencies {
-    implementation 'it.unimi.dsi:fastutil:8.5.13'
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
