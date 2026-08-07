@@ -1,12 +1,12 @@
 package com.example.ultramemorycore.memory;
 
 import com.example.ultramemorycore.UltraMemoryCore;
+import com.example.ultramemorycore.UltraMemoryCoreFabric;
 import com.example.ultramemorycore.pool.UploadBufferPool;
 
 public final class ChunkGovernor {
 
     private static long lastTrim = 0L;
-
     private static boolean aggressive = false;
 
     private ChunkGovernor() {}
@@ -20,27 +20,22 @@ public final class ChunkGovernor {
                         / (1024 * 1024);
 
         boolean flight = FlightModeDetector.isFastElytraFlight();
-
         long now = System.currentTimeMillis();
 
         // Chế độ Elytra tốc độ cao
         if (flight && usedMB > 1100) {
 
             if (!aggressive) {
-
                 aggressive = true;
-
                 UploadBufferPool.configure(4L * 1024L * 1024L);
 
-                UltraMemoryCore.LOGGER.info(
+                UltraMemoryCoreFabric.LOGGER.info(
                         "[UMC Governor] Entered Flight Mode"
                 );
             }
 
             if (now - lastTrim > 5000) {
-
                 UltraMemoryCore.trimAllCaches();
-
                 lastTrim = now;
             }
 
@@ -49,12 +44,10 @@ public final class ChunkGovernor {
 
         // Khôi phục chế độ bình thường
         if (aggressive) {
-
             aggressive = false;
-
             UploadBufferPool.configure(16L * 1024L * 1024L);
 
-            UltraMemoryCore.LOGGER.info(
+            UltraMemoryCoreFabric.LOGGER.info(
                     "[UMC Governor] Restored Normal Mode"
             );
         }
@@ -63,12 +56,10 @@ public final class ChunkGovernor {
         if (usedMB > 1350 && now - lastTrim > 10000) {
 
             UltraMemoryCore.trimAllCaches();
-
             System.gc();
-
             lastTrim = now;
 
-            UltraMemoryCore.LOGGER.warn(
+            UltraMemoryCoreFabric.LOGGER.warn(
                     "[UMC Governor] Emergency trim at {} MB",
                     usedMB
             );
