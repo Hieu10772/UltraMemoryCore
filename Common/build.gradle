@@ -1,6 +1,5 @@
 plugins {
-    // Dùng plugin ID mới dành cho các bản Minecraft không bị mã hóa (từ 26.1 trở lên)
-    id 'net.fabricmc.fabric-loom'
+    id 'net.fabricmc.fabric-loom' version '1.17.12'
 }
 
 repositories {
@@ -15,11 +14,15 @@ java {
     withSourcesJar()
 }
 
+// BỔ SUNG CẤU HÌNH NÀY ĐỂ LOOM TẠO NAMED ELEMENTS FOR SUBPROJECTS
+loom {
+    // Nếu bạn không chạy Client/Server trực tiếp từ :Common
+    // Dòng này giúp Loom tạo variant namedElements chuẩn cho :Fabric
+    splitEnvironmentSourceSets() 
+}
+
 dependencies {
-    // Khai báo chính xác phiên bản Minecraft 26.2
     minecraft "com.mojang:minecraft:26.2"
-    
-    // Từ MC 26.1+ không cần cấu hình mappings (Yarn/Mojang) nữa vì game đã bỏ obfuscation!
 }
 
 tasks.withType(JavaCompile).configureEach {
