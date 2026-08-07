@@ -1,0 +1,9 @@
+plugins {
+    id 'ultramemorycore.loader-conventions' // Áp dụng java-library & toolchain chung
+    id 'net.fabricmc.fabric-loom'            // Kích hoạt Fabric Loom riêng cho Fabric modules
+}
+
+repositories {
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.terraformersmc.com/releases/' }
+}
