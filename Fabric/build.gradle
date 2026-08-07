@@ -31,12 +31,11 @@ loom {
     }
 }
 
-// Lấy source từ Common giống FerriteCore
 compileJava {
-    source(project(':Common').sourceSets.main.allSource)
+    source(project(':Common').sourceSets.main.allJava)
 }
 
 processResources {
-    from project(':Common').sourceSets.main.output.resourcesDir
-    dependsOn project(':Common').processResources
+    from(project(':Common').sourceSets.main.resources)
+    dependsOn(project(':Common').processResources)
 }
