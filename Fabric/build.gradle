@@ -10,8 +10,18 @@ repositories {
 }
 
 dependencies {
-    minecraft group: 'com.mojang', name: 'minecraft', version: minecraft_version
-    implementation group: 'net.fabricmc', name: 'fabric-loader', version: loader_version
+    // 1. Minecraft & Fabric Loader
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // 2. Thêm Fabric API (Bắt buộc để giải quyết các import net.fabricmc.fabric.api.*)
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // 3. Thêm ModMenu (Bắt buộc để giải quyết các import com.terraformersmc.modmenu.api.*)
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    // 4. Liên kết với module Common
+    implementation project(path: ':Common', configuration: 'namedElements')
 }
 
 loom {
@@ -37,5 +47,4 @@ compileJava {
 
 processResources {
     from(project(':Common').sourceSets.main.resources)
-    dependsOn(project(':Common').processResources)
 }
