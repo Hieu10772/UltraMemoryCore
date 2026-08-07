@@ -38,7 +38,7 @@ public final class ElytraMemoryGuard {
 
                 lastHardCleanup = now;
 
-                UltraMemoryCore.LOGGER.info(
+                UltraMemoryCoreFabric.LOGGER.info(
                         "[UltraMemoryCore] Elytra emergency cleanup triggered at {} MB",
                         usedMB
                 );
