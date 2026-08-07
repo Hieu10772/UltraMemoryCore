@@ -1,6 +1,6 @@
 plugins {
     // Dùng plugin ID mới dành cho các bản Minecraft không bị mã hóa (từ 26.1 trở lên)
-    id 'net.fabricmc.fabric-loom' version '1.17.12'
+    id 'net.fabricmc.fabric-loom'
 }
 
 repositories {
