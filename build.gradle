@@ -1,14 +1,3 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabricmc.net/' }
-        gradlePluginPortal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.fabricmc:fabric-loom:1.17.12'
-    }
-}
-
 allprojects {
     repositories {
         mavenCentral()
