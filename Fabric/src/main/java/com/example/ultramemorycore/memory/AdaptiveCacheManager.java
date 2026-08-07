@@ -33,7 +33,7 @@ public final class AdaptiveCacheManager {
 
             System.gc();
 
-            UltraMemoryCore.LOGGER.info(
+            UltraMemoryCoreFabric.LOGGER.info(
                     "[UMC] Emergency memory cleanup ({}%)",
                     (int)(usage * 100)
             );
@@ -43,7 +43,7 @@ public final class AdaptiveCacheManager {
 
             UltraMemoryCore.trimAllCaches();
 
-            UltraMemoryCore.LOGGER.info(
+            UltraMemoryCoreFabric.LOGGER.info(
                     "[UMC] Soft memory cleanup ({}%)",
                     (int)(usage * 100)
             );
