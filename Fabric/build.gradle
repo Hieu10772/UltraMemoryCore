@@ -12,19 +12,18 @@ repositories {
     mavenCentral()
 }
 
-// 1. Khai báo Minecraft & Common bên ngoài để Loom setup metadata ngay từ đầu
 dependencies {
+    // 1. Minecraft JAR
     minecraft "com.mojang:minecraft:26.2"
-    implementation project(':Common')
-}
 
-// 2. Đưa các mod dependency của Fabric vào afterEvaluate để tránh lỗi 'modImplementation' missing
-afterEvaluate {
-    dependencies {
-        modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-        modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-    }
+    // 2. Subproject Common
+    implementation project(':Common')
+
+    // 3. Thêm Fabric mod dependencies thông qua Configuration Name bằng phương thức add()
+    // Cách này bypass việc gọi phương thức modImplementation() trực tiếp
+    add('modImplementation', "net.fabricmc:fabric-loader:${project.loader_version}")
+    add('modImplementation', "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+    add('modImplementation', "com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 loom {
