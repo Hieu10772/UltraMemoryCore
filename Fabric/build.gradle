@@ -2,7 +2,6 @@ plugins {
     id 'ultramemorycore.loader-conventions'
 }
 
-// Apply Fabric Loom plugin
 apply plugin: 'net.fabricmc.fabric-loom'
 
 evaluationDependsOn(':Common')
@@ -13,19 +12,18 @@ repositories {
     mavenCentral()
 }
 
-// BẮT BỘC: Đưa dependencies của Fabric vào afterEvaluate
+// 1. Khai báo Minecraft & Common bên ngoài để Loom setup metadata ngay từ đầu
+dependencies {
+    minecraft "com.mojang:minecraft:26.2"
+    implementation project(':Common')
+}
+
+// 2. Đưa các mod dependency của Fabric vào afterEvaluate để tránh lỗi 'modImplementation' missing
 afterEvaluate {
     dependencies {
-        // 1. Minecraft JAR
-        minecraft "com.mojang:minecraft:26.2"
-
-        // 2. Fabric Dependencies
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
         modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-
-        // 3. Subproject Common
-        implementation project(':Common')
     }
 }
 
