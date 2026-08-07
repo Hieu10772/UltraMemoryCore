@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom'
+    id 'java-library'
 }
 
 repositories {
@@ -12,10 +12,6 @@ java {
         languageVersion = JavaLanguageVersion.of(25)
     }
     withSourcesJar()
-}
-
-dependencies {
-    minecraft "com.mojang:minecraft:26.2"
 }
 
 tasks.withType(JavaCompile).configureEach {
