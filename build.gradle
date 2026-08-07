@@ -1,7 +1,7 @@
 plugins {
     // 1. Khai báo Fabric Loom ở Root và set 'apply false' 
     // Cách này truyền Plugin Classpath xuống cho subproject :Fabric
-    id 'net.fabricmc.fabric-loom' version '1.17.12' apply false
+    id 'net.fabricmc.fabric-loom'
 }
 
 allprojects {
