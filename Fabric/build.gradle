@@ -1,19 +1,26 @@
 plugins {
+    id 'net.fabricmc.fabric-loom'
     id 'ultramemorycore.loader-conventions'
 }
 
 evaluationDependsOn(':Common')
 
+repositories {
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.terraformersmc.com/releases/' }
+    mavenCentral()
+}
+
 dependencies {
     // 1. Minecraft
     minecraft "com.mojang:minecraft:26.2"
 
-    // 2. Mod Dependencies (Loom đã đăng ký modImplementation qua convention)
+    // 2. Fabric Mod Dependencies
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-    // 3. Common
+    // 3. Module Common
     implementation project(':Common')
 }
 
