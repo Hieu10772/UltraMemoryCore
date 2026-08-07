@@ -1,6 +1,5 @@
 package com.example.ultramemorycore;
 
-import com.example.ultramemorycore.cache.BlockStatePaletteCache;
 import com.example.ultramemorycore.command.UmcCommand;
 import com.example.ultramemorycore.config.UltraMemoryCoreConfig;
 import com.example.ultramemorycore.memory.ChunkColdStorage;
@@ -9,14 +8,10 @@ import com.example.ultramemorycore.memory.ChunkFlightTrimmer;
 import com.example.ultramemorycore.memory.ChunkGovernor;
 import com.example.ultramemorycore.memory.ChunkVisibilityTracker;
 import com.example.ultramemorycore.memory.ElytraMemoryGuard;
-import com.example.ultramemorycore.memory.FastPropertyMap;
 import com.example.ultramemorycore.memory.IdleMemoryBalancer;
 import com.example.ultramemorycore.memory.MemoryProfile;
 import com.example.ultramemorycore.memory.PlatformDetector;
 import com.example.ultramemorycore.memory.PostFlightCleanup;
-import com.example.ultramemorycore.memory.SharedPropertyMap;
-import com.example.ultramemorycore.memory.UltraFastPropertyMap;
-import com.example.ultramemorycore.memory.VoxelShapeCache;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -39,15 +34,12 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
     @Override
     public void onInitialize() {
 
-        // Không cho chạy cùng FerriteCore
+        // Chặn FerriteCore
         if (FabricLoader.getInstance().isModLoaded("ferritecore")) {
-
             String message =
-                    "Please remove FerritCore to use UltraMemoryCore, " +
-                    "Bye FerritCore!";
+                    "Please remove FerriteCore to use UltraMemoryCore.";
 
             LOGGER.error("[UltraMemoryCore] {}", message);
-
             throw new IllegalStateException(message);
         }
 
@@ -56,11 +48,12 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
         activeProfile =
                 PlatformDetector.detectProfile(config.getMemoryProfile());
 
-        // bootstrap phần Common
+        // Khởi tạo lõi Common
         UltraMemoryCore.bootstrap();
+        UltraMemoryCore.setEnabled(config.isEnabled());
 
         LOGGER.info(
-                "[UltraMemoryCore] Initialized with Profile: {}",
+                "[UltraMemoryCore] Initialized with profile: {}",
                 activeProfile
         );
 
@@ -72,19 +65,19 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
 
         // Đóng hẳn Minecraft
         ClientLifecycleEvents.CLIENT_STOPPING.register(
-                client -> trimAllCaches()
+                client -> UltraMemoryCore.trimAllCaches()
         );
 
         // Rời world về menu chính
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            trimAllCaches();
+            UltraMemoryCore.trimAllCaches();
 
             LOGGER.info(
                     "[UltraMemoryCore] World disconnected - caches trimmed."
             );
         });
 
-        // Tick toàn bộ hệ thống quản lý bộ nhớ client
+        // Tick hệ thống quản lý bộ nhớ
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
             if (!UltraMemoryCore.isEnabled()) {
@@ -106,7 +99,7 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
             PostFlightCleanup.tick(client);
             IdleMemoryBalancer.tick(client);
 
-            // Cold storage (unload chunk xa)
+            // Cold storage
             ChunkColdStorage.tick(client);
         });
     }
@@ -117,26 +110,5 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
 
     public static MemoryProfile getActiveProfile() {
         return activeProfile;
-    }
-
-    public static void trimAllCaches() {
-
-        // cache Minecraft-specific nằm ở Fabric
-        UltraFastPropertyMap.clear();
-        FastPropertyMap.clear();
-        SharedPropertyMap.clear();
-
-        VoxelShapeCache.clear();
-
-        BlockStatePaletteCache.clear();
-
-        // cleanup phần Common
-        UltraMemoryCore.trimAllCaches();
-
-        ChunkColdStorage.clear();
-
-        LOGGER.info(
-                "[UltraMemoryCore] Memory pools and caches trimmed."
-        );
     }
 }
