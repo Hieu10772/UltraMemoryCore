@@ -5,7 +5,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Load Fabric Loom vào classpath cho toàn bộ dự án mà KHÔNG apply ở Root
         classpath 'net.fabricmc:fabric-loom:1.17.12'
     }
 }
