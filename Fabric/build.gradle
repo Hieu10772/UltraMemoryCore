@@ -1,4 +1,3 @@
-```groovy
 plugins {
     id 'ultramemorycore.loader-conventions'
     id 'net.fabricmc.fabric-loom'
@@ -48,4 +47,3 @@ processResources {
     from project(':Common').sourceSets.main.output.resourcesDir
     dependsOn project(':Common').processResources
 }
-```
