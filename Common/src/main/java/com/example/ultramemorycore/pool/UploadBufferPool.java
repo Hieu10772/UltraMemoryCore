@@ -1,7 +1,5 @@
 package com.example.ultramemorycore.pool;
 
-import com.example.ultramemorycore.memory.PlatformDetector;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayDeque;
@@ -11,34 +9,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class UploadBufferPool {
 
-    private static final int IOS_MAX_BUCKET = 256 * 1024;
-    private static final int DESKTOP_MAX_BUCKET = 2 * 1024 * 1024;
+    private static final int MAX_BUCKET = 2 * 1024 * 1024;
 
     private static final Map<Integer, Deque<ByteBuffer>> BUCKETS =
             new ConcurrentHashMap<>();
+
     private static volatile long temporaryLimit = 16L * 1024L * 1024L;
 
-    private UploadBufferPool() {}
-    
-    public static void configure(long limitBytes) {
-     temporaryLimit = Math.max(1024L * 1024L, limitBytes);
- }
-    public static ByteBuffer acquire(int capacity) {
+    private UploadBufferPool() {
+    }
 
-        // iOS + Pojav: không reuse direct buffer để tránh native memory buildup
-        if (PlatformDetector.disableUploadBufferPooling()) {
-            return allocate(capacity);
-        }
+    public static void configure(long limitBytes) {
+        temporaryLimit = Math.max(1024L * 1024L, limitBytes);
+    }
+
+    public static ByteBuffer acquire(int capacity) {
 
         int bucketSize = nextPowerOfTwo(capacity);
 
-int maxBucket = PlatformDetector.disableUploadBufferPooling()
-        ? IOS_MAX_BUCKET
-        : DESKTOP_MAX_BUCKET;
-
-if (bucketSize > maxBucket) {
-    return allocate(bucketSize);
-}
+        if (bucketSize > MAX_BUCKET) {
+            return allocate(bucketSize);
+        }
 
         Deque<ByteBuffer> stack = BUCKETS.get(bucketSize);
 
@@ -58,34 +49,30 @@ if (bucketSize > maxBucket) {
 
     public static void release(ByteBuffer buffer) {
 
-    if (buffer == null || !buffer.isDirect()) {
-        return;
-    }
-
-    // iOS / Pojav: không giữ DirectBuffer
-    if (PlatformDetector.disableUploadBufferPooling()) {
-        return;
-    }
-
-    int capacity = buffer.capacity();
-
-    if (capacity > DESKTOP_MAX_BUCKET || capacity > temporaryLimit) {
-        return;
-    }
-
-    Deque<ByteBuffer> deque =
-            BUCKETS.computeIfAbsent(capacity, k -> new ArrayDeque<>());
-
-    synchronized (deque) {
-
-        // Giới hạn tối đa 4 buffer cho mỗi bucket
-        if (deque.size() >= 4) {
+        if (buffer == null || !buffer.isDirect()) {
             return;
         }
 
-        deque.offerFirst(buffer);
+        int capacity = buffer.capacity();
+
+        if (capacity > MAX_BUCKET || capacity > temporaryLimit) {
+            return;
+        }
+
+        Deque<ByteBuffer> deque =
+                BUCKETS.computeIfAbsent(capacity, k -> new ArrayDeque<>());
+
+        synchronized (deque) {
+
+            // Giới hạn tối đa 4 buffer cho mỗi bucket
+            if (deque.size() >= 4) {
+                return;
+            }
+
+            buffer.clear();
+            deque.offerFirst(buffer);
+        }
     }
-}
 
     public static void clear() {
         BUCKETS.clear();
@@ -105,6 +92,6 @@ if (bucketSize > maxBucket) {
 
         int highest = Integer.highestOneBit(value);
 
-        return value == highest ? value : highest << 1;
+        return value == highest ? highest : highest << 1;
     }
 }
