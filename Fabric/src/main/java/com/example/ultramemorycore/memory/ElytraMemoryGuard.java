@@ -1,5 +1,6 @@
 package com.example.ultramemorycore.memory;
 
+import com.example.ultramemorycore.UltraMemoryCoreFabric;
 import com.example.ultramemorycore.UltraMemoryCore;
 
 public final class ElytraMemoryGuard {
