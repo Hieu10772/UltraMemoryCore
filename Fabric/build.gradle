@@ -1,5 +1,5 @@
 plugins {
-    id 'ultramemorycore.loader-conventions'
+    id 'ultramemorycore.fabric-conventions' // Sử dụng convention đã có Loom
 }
 
 evaluationDependsOn(':Common')
@@ -8,12 +8,12 @@ dependencies {
     // 1. Minecraft JAR
     minecraft "com.mojang:minecraft:26.2"
 
-    // 2. Fabric Dependencies (Đã có sẵn modImplementation từ convention)
+    // 2. Fabric Mod Dependencies
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-    // 3. Subproject Common
+    // 3. Common Subproject
     implementation project(':Common')
 }
 
