@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public final class UltraMemoryCoreFabric implements ModInitializer {
 
     public static final Logger LOGGER =
-            LoggerFactory.getLogger(UltraMemoryCore.MOD_ID);
+            LoggerFactory.getLogger("ultramemorycore");
 
     private static UltraMemoryCoreConfig config;
     private static MemoryProfile activeProfile;
@@ -34,19 +34,15 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
     @Override
     public void onInitialize() {
 
-        // Không cho chạy cùng FerriteCore
         if (FabricLoader.getInstance().isModLoaded("ferritecore")) {
-
             String message =
                     "Please remove FerriteCore to use UltraMemoryCore.";
 
             LOGGER.error("[UltraMemoryCore] {}", message);
-
             throw new IllegalStateException(message);
         }
 
         config = UltraMemoryCoreConfig.load();
-
         activeProfile =
                 PlatformDetector.detectProfile(config.getMemoryProfile());
 
@@ -57,50 +53,35 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
                 activeProfile
         );
 
-        // Command
         CommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess, environment) ->
                         UmcCommand.register(dispatcher)
         );
 
-        // Đóng hẳn Minecraft
         ClientLifecycleEvents.CLIENT_STOPPING.register(
                 client -> UltraMemoryCore.trimAllCaches()
         );
 
-        // Rời world về menu chính
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-
             UltraMemoryCore.trimAllCaches();
-
             LOGGER.info(
                     "[UltraMemoryCore] World disconnected - caches trimmed."
             );
         });
 
-        // Tick toàn bộ hệ thống quản lý bộ nhớ client
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (!UltraMemoryCore.isEnabled()) return;
+            if (client.world == null || client.player == null) return;
 
-            if (!UltraMemoryCore.isEnabled()) {
-                return;
-            }
-
-            if (client.world == null || client.player == null) {
-                return;
-            }
-
-            // Chunk streaming
             ChunkFlightTrimmer.tick();
             ChunkGovernor.tick();
             ChunkEvictionManager.tick(client);
             ChunkVisibilityTracker.tick(client);
 
-            // Elytra / idle cleanup
             ElytraMemoryGuard.tick();
             PostFlightCleanup.tick(client);
             IdleMemoryBalancer.tick(client);
 
-            // Cold storage
             ChunkColdStorage.tick(client);
         });
     }
