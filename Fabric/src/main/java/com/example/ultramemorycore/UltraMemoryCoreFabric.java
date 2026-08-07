@@ -64,18 +64,18 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
         );
 
         // Đóng hẳn Minecraft
-        ClientLifecycleEvents.CLIENT_STOPPING.register(
-                client -> UltraMemoryCore.trimAllCaches()
-        );
+ClientLifecycleEvents.CLIENT_STOPPING.register(
+        client -> trimClientCaches()
+);
 
-        // Rời world về menu chính
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            UltraMemoryCore.trimAllCaches();
+// Rời world về menu chính
+ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+    trimClientCaches();
 
-            LOGGER.info(
-                    "[UltraMemoryCore] World disconnected - caches trimmed."
-            );
-        });
+    LOGGER.info(
+            "[UltraMemoryCore] World disconnected - caches trimmed."
+    );
+});
 
         // Tick hệ thống quản lý bộ nhớ
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -111,4 +111,23 @@ public final class UltraMemoryCoreFabric implements ModInitializer {
     public static MemoryProfile getActiveProfile() {
         return activeProfile;
     }
+    
+    private static void trimClientCaches() {
+    UltraFastPropertyMap.clear();
+    FastPropertyMap.clear();
+    SharedPropertyMap.clear();
+
+    VoxelShapeCache.clear();
+
+    NbtStringPool.trim();
+    BlockStatePaletteCache.clear();
+
+    PaletteArrayPool.clear();
+    ArrayPools.clearAll();
+    UploadBufferPool.clear();
+
+    ChunkColdStorage.clear();
+
+    LOGGER.info("[UltraMemoryCore] Memory pools and caches trimmed.");
+}
 }
