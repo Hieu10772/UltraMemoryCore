@@ -1,10 +1,5 @@
 package com.example.ultramemorycore;
 
-import com.example.ultramemorycore.memory.FastPropertyMap;
-import com.example.ultramemorycore.memory.SharedPropertyMap;
-import com.example.ultramemorycore.memory.UltraFastPropertyMap;
-import com.example.ultramemorycore.memory.VoxelShapeCache;
-import com.example.ultramemorycore.cache.BlockStatePaletteCache;
 import com.example.ultramemorycore.cache.NbtStringPool;
 import com.example.ultramemorycore.pool.ArrayPools;
 import com.example.ultramemorycore.pool.PaletteArrayPool;
@@ -33,14 +28,8 @@ public final class UltraMemoryCore {
 
     public static void trimAllCaches() {
 
-        UltraFastPropertyMap.clear();
-        FastPropertyMap.clear();
-        SharedPropertyMap.clear();
-
-        VoxelShapeCache.clear();
-
+        // chỉ cleanup các pool/cache còn nằm trong Common
         NbtStringPool.trim();
-        BlockStatePaletteCache.clear();
 
         PaletteArrayPool.clear();
         ArrayPools.clearAll();
