@@ -1,9 +1,9 @@
-evaluationDependsOn(':Common')
-
 plugins {
     id 'ultramemorycore.loader-conventions'
     id 'net.fabricmc.fabric-loom'
 }
+
+evaluationDependsOn(':Common')
 
 repositories {
     maven { url 'https://maven.fabricmc.net/' }
