@@ -1,7 +1,13 @@
-plugins {
-    // 1. Khai báo Fabric Loom ở Root và set 'apply false' 
-    // Cách này truyền Plugin Classpath xuống cho subproject :Fabric
-    id 'net.fabricmc.fabric-loom'
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabricmc.net/' }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        // Load Fabric Loom vào classpath cho toàn bộ dự án mà KHÔNG apply ở Root
+        classpath 'net.fabricmc:fabric-loom:1.17.12'
+    }
 }
 
 allprojects {
