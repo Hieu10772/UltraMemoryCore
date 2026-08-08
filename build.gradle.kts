@@ -10,19 +10,18 @@ repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
 
-    // ModMenu
     maven("https://maven.terraformersmc.com/releases/")
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
 
-    // Dùng implementation chuẩn của Gradle cho tất cả thư viện
     implementation("net.fabricmc:fabric-loader:${property("loader_version")}")
     implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     implementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
-    // Dependencies khác
+    modApi "maven.modrinth:cloth-config:${project.cloth_config_version}"
+
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
 }
