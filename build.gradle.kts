@@ -14,15 +14,11 @@ repositories {
     maven("https://maven.terraformersmc.com/releases/")
 }
 
-// Bắt buộc Loom tạo các configuration modImplementation / modApi mà KHÔNG cần dùng mappings()
-loom {
-    noImplicitMappings()
-}
-
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
 
-    // Hoàn toàn KHÔNG CÓ dòng mappings() nào ở đây cả
+    // Nhờ fabric.loom.unobfuscated=false, dòng này sẽ hoạt động bình thường
+    "mappings"(loom.officialMojangMappings())
 
     "modImplementation"("net.fabricmc:fabric-loader:${property("loader_version")}")
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
