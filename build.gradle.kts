@@ -9,8 +9,8 @@ group = project.property("mod_group") as String
 repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
-
     maven("https://maven.terraformersmc.com/releases/")
+    maven("https://api.modrinth.com/maven")
 }
 
 dependencies {
@@ -30,11 +30,11 @@ loom {
     runs {
         named("client") {
             client()
-            runDir = "run"
+            runDir.set("run")
         }
         named("server") {
             server()
-            runDir = "run"
+            runDir.set("run")
         }
     }
 }
