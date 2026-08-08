@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("net.fabricmc.fabric-loom") version "1.11.7"
+    id("net.fabricmc.fabric-loom") version "1.17.12"
 }
 
 version = project.property("mod_version") as String
