@@ -1,7 +1,15 @@
-plugins {
-    id 'net.fabricmc.fabric-loom' version '1.17.12'
-    id 'java'
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabricmc.net/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.fabricmc:fabric-loom:1.11.7'
+    }
 }
+
+apply plugin: 'net.fabricmc.fabric-loom'
+apply plugin: 'java'
 
 group = 'com.example.ultramemorycore'
 version = project.mod_version
@@ -13,26 +21,15 @@ repositories {
 }
 
 dependencies {
-    // 1. Minecraft
+    // 1. Minecraft Jar
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
-    // 2. Fabric Loader & Fabric API
+    // 2. Fabric Loader & Fabric API (Lúc này modImplementation chắc chắn đã được nhận diện)
     modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    // 3. ModMenu (Optional)
+    // 3. ModMenu
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.release = 25
-    options.encoding = 'UTF-8'
 }
 
 loom {
