@@ -1,45 +1,43 @@
 name: Build UltraMemoryCore
 
 on:
-  # Tự động build khi push lên BẤM KỲ nhánh nào
-  push:
-    branches:
-      - '**'
-  # Tự động build khi tạo Pull Request
-  pull_request:
-    branches:
-      - '**'
-  # Giữ lại tùy chọn này để nếu muốn bấm tay vẫn bấm được
   workflow_dispatch:
+    inputs:
+      build_name:
+        description: 'Name'
+        required: true
+        default: 'Build UltraMemoryCore'
+
+run-name: "${{ github.event.inputs.build_name }}"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-version: '8.12'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Build with Gradle
-      run: ./gradlew build --stacktrace
+      - name: Build with Gradle
+        run: ./gradlew build --stacktrace
 
-    - name: Upload Mod Artifact
-      uses: actions/upload-artifact@v4
-      if: success()
-      with:
-        name: ultramemorycore-jar
-        path: build/libs/*.jar
+      - name: Upload Mod Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ultramemorycore-jar
+          path: |
+            Fabric/build/libs/*.jar
+            build/libs/*.jar
