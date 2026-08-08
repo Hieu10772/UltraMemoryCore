@@ -1,6 +1,6 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.state.property.Property;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
