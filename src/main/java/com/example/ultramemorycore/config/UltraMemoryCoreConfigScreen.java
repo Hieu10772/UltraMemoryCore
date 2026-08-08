@@ -69,8 +69,9 @@ public class UltraMemoryCoreConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        if (this.minecraft != null) {
-            this.minecraft.setScreen(this.parent);
+        Minecraft mc = Minecraft.getInstance();
+        if (mc != null) {
+            mc.setScreen(this.parent);
         }
     }
 }
