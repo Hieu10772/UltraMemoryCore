@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Component;
 public class UltraMemoryCoreConfigScreen extends Screen {
 
     private final Screen parent;
-    private UltraMemoryCoreConfig config;
+    private final UltraMemoryCoreConfig config;
 
     public UltraMemoryCoreConfigScreen(Screen parent) {
         super(Component.literal("UltraMemoryCore Settings"));
@@ -36,9 +36,11 @@ public class UltraMemoryCoreConfigScreen extends Screen {
 
         // Memory Profile
         this.addRenderableWidget(
-                CycleButton.<MemoryProfile>builder(profile -> Component.literal(profile.name()))
+                CycleButton.builder(
+                                (MemoryProfile profile) -> Component.literal(profile.name()),
+                                config.getMemoryProfile()
+                        )
                         .withValues(MemoryProfile.values())
-                        .withInitialValue(config.getMemoryProfile())
                         .create(centerX - 100, y, 200, 20,
                                 Component.literal("Memory Profile"),
                                 (button, value) -> config.setMemoryProfile(value))
@@ -67,6 +69,8 @@ public class UltraMemoryCoreConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft.getInstance().setScreen(this.parent);
+        if (this.minecraft != null) {
+            this.minecraft.setScreen(this.parent);
+        }
     }
 }
