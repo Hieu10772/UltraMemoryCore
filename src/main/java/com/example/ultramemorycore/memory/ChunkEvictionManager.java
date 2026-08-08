@@ -19,7 +19,7 @@ public final class ChunkEvictionManager {
 
     public static void markVisible(ChunkPos pos) {
         LAST_SEEN.put(
-                pos.toLong(),
+                ChunkPos.pack(pos.x(), pos.z()),
                 System.currentTimeMillis()
         );
     }
