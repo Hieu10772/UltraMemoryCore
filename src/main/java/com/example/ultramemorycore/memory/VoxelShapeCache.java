@@ -1,6 +1,6 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;
