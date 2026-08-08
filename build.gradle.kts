@@ -20,7 +20,7 @@ dependencies {
     implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     implementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
-    modApi "maven.modrinth:cloth-config:${project.cloth_config_version}"
+    modApi("maven.modrinth:cloth-config:${project.property("cloth_config_version")}")
 
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
