@@ -26,15 +26,16 @@ dependencies {
     implementation("it.unimi.dsi:fastutil:8.5.18")
 }
 
+@Suppress("DEPRECATION")
 loom {
     runs {
         named("client") {
             client()
-            runDir.set("run")
+            runDir = "run"
         }
         named("server") {
             server()
-            runDir.set("run")
+            runDir = "run"
         }
     }
 }
