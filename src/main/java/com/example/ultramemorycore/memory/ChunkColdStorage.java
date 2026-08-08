@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.level.ChunkPos;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -57,9 +57,9 @@ public final class ChunkColdStorage {
 
     // ===== Main tick =====
 
-    public static void tick(MinecraftClient client) {
+    public static void tick(Minecraft client) {
 
-        if (client.world == null || client.player == null) {
+        if (client.level == null || client.player == null) {
             return;
         }
 
@@ -81,7 +81,7 @@ public final class ChunkColdStorage {
             UltraFastPropertyMap.trim();
         }
 
-        ChunkPos playerPos = client.player.getChunkPos();
+        ChunkPos playerPos = client.player.chunkPosition();
 
         boolean needSweep = false;
 
@@ -101,7 +101,7 @@ public final class ChunkColdStorage {
 
             // Giữ thêm 4 chunk đệm ngoài view distance
             int limit =
-                    client.options.getViewDistance().getValue() + 4;
+                    client.options.renderDistance().get() + 4;
 
             // Chunk đã ra khỏi vùng nhìn một thời gian
             if (age > softCleanupMs()
