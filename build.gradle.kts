@@ -15,12 +15,8 @@ repositories {
 }
 
 dependencies {
+    // Chỉ khai báo minecraft, KHÔNG dùng dòng mappings() nào ở đây cả
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    
-    // Gọi string invoke "mappings" để tránh lỗi Unresolved reference trong KTS
-    "mappings"(loom.layered {
-        officialMojangMappings()
-    })
 
     "modImplementation"("net.fabricmc:fabric-loader:${property("loader_version")}")
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
@@ -32,6 +28,9 @@ dependencies {
 }
 
 loom {
+    // Tắt remap jar vì môi trường 26.2 không bị obfuscate
+    remapArchives.set(false)
+
     runs {
         named("client") {
             client()
