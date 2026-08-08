@@ -15,16 +15,13 @@ repositories {
 }
 
 dependencies {
-    // 1. Minecraft Jar & Mojang Official Mappings
-    minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
+    // Mojang Official Mappings cho 26.2
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
 
-    // 2. Fabric Loader & Fabric API
-    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
-
-    // 3. ModMenu
-    modImplementation("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+    modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
     // Explicit dependencies for standalone benchmark and future optimization code
     implementation("com.google.code.gson:gson:2.13.1")
@@ -35,15 +32,11 @@ loom {
     runs {
         named("client") {
             client()
-            configName = "Fabric Client"
-            ideConfigGenerated(true)
-            runDir = "run"
+            runDir("run")
         }
         named("server") {
             server()
-            configName = "Fabric Server"
-            ideConfigGenerated(true)
-            runDir = "run"
+            runDir("run")
         }
     }
 }
