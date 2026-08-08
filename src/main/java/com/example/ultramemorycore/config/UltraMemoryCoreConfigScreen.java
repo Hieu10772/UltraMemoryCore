@@ -2,7 +2,6 @@ package com.example.ultramemorycore.config;
 
 import com.example.ultramemorycore.UltraMemoryCore;
 import com.example.ultramemorycore.memory.MemoryProfile;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
@@ -69,9 +68,8 @@ public class UltraMemoryCoreConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc != null) {
-            mc.setScreen(this.parent);
+        if (this.minecraft != null && this.minecraft.gui != null) {
+            this.minecraft.gui.setScreen(this.parent);
         }
     }
 }
