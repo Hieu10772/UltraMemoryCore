@@ -14,9 +14,15 @@ repositories {
     maven("https://maven.terraformersmc.com/releases/")
 }
 
+// Bắt buộc Loom tạo các configuration modImplementation / modApi mà KHÔNG cần dùng mappings()
+loom {
+    noImplicitMappings()
+}
+
 dependencies {
-    // Chỉ khai báo minecraft, KHÔNG dùng dòng mappings() nào ở đây cả
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+
+    // Hoàn toàn KHÔNG CÓ dòng mappings() nào ở đây cả
 
     "modImplementation"("net.fabricmc:fabric-loader:${property("loader_version")}")
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
@@ -28,17 +34,14 @@ dependencies {
 }
 
 loom {
-    // Tắt remap jar vì môi trường 26.2 không bị obfuscate
-    remapArchives.set(false)
-
     runs {
         named("client") {
             client()
-            runDir("run")
+            runDir = "run"
         }
         named("server") {
             server()
-            runDir("run")
+            runDir = "run"
         }
     }
 }
