@@ -1,15 +1,1 @@
-pluginManagement {
-    repositories {
-        maven { url 'https://maven.fabricmc.net/' }
-        gradlePluginPortal()
-        mavenCentral()
-    }
-    plugins {
-        // Khai báo phiên bản Fabric Loom mặc định ở đây (vd: 1.10-SNAPSHOT hoặc 1.9.2)
-        id 'net.fabricmc.fabric-loom' version '1.17.12'
-    }
-}
-
 rootProject.name = 'UltraMemoryCore-26.2'
-
-include 'Common', 'Fabric'
