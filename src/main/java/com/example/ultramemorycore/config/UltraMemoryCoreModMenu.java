@@ -7,7 +7,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.util.Optional;
 
@@ -21,20 +21,20 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
 
             ConfigBuilder builder = ConfigBuilder.create()
                     .setParentScreen(parent)
-                    .setTitle(Text.literal("UltraMemoryCore Settings"));
+                    .setTitle(Component.literal("UltraMemoryCore Settings"));
 
             // Lưu toàn bộ config 1 lần duy nhất khi bấm Save & Done
             builder.setSavingRunnable(config::save);
 
             ConfigCategory category = builder.getOrCreateCategory(
-                    Text.literal("General")
+                    Component.literal("General")
             );
 
             ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
             // 1. Enable / Disable
             category.addEntry(entryBuilder.startBooleanToggle(
-                            Text.literal("Enable UltraMemoryCore"),
+                            Component.literal("Enable UltraMemoryCore"),
                             config.isEnabled()
                     )
                     .setDefaultValue(true)
@@ -43,29 +43,29 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
 
             // 2. Device profile
             category.addEntry(entryBuilder.startEnumSelector(
-                            Text.literal("Device Profile"),
+                            Component.literal("Device Profile"),
                             MemoryProfile.class,
                             config.getMemoryProfile()
                     )
                     .setEnumNameProvider(profile -> {
-                        if (profile == MemoryProfile.AUTO) return Text.literal("Auto");
-                        if (profile == MemoryProfile.DESKTOP) return Text.literal("Desktop");
-                        if (profile == MemoryProfile.LOW_RAM_ANDROID) return Text.literal("Android");
-                        if (profile == MemoryProfile.IOS_POJAV) return Text.literal("iOS");
-                        return Text.literal("Custom");
+                        if (profile == MemoryProfile.AUTO) return Component.literal("Auto");
+                        if (profile == MemoryProfile.DESKTOP) return Component.literal("Desktop");
+                        if (profile == MemoryProfile.LOW_RAM_ANDROID) return Component.literal("Android");
+                        if (profile == MemoryProfile.IOS_POJAV) return Component.literal("iOS");
+                        return Component.literal("Custom");
                     })
                     .setTooltipSupplier(profile -> {
                         if (profile == MemoryProfile.CUSTOM) {
-                            return Optional.of(new Text[]{
-                                    Text.literal("Enable custom memory settings."),
-                                    Text.literal("Save and reopen to adjust custom options if changed.")
+                            return Optional.of(new Component[]{
+                                    Component.literal("Enable custom memory settings."),
+                                    Component.literal("Save and reopen to adjust custom options if changed.")
                             });
                         }
 
-                        return Optional.of(new Text[]{
-                                Text.literal("Palette Cache: " + profile.getMaxPaletteCache()),
-                                Text.literal("Upload Buffer: " + (profile.getMaxUploadBufferSize() / 1024) + " KB"),
-                                Text.literal("Cache Keep Time: " + profile.getPoolTimeoutMs() + " ms")
+                        return Optional.of(new Component[]{
+                                Component.literal("Palette Cache: " + profile.getMaxPaletteCache()),
+                                Component.literal("Upload Buffer: " + (profile.getMaxUploadBufferSize() / 1024) + " KB"),
+                                Component.literal("Cache Keep Time: " + profile.getPoolTimeoutMs() + " ms")
                         });
                     })
                     .setSaveConsumer(config::setMemoryProfile)
@@ -77,7 +77,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
             if (custom) {
                 // Max palette cache
                 category.addEntry(entryBuilder.startIntField(
-                                Text.literal("Max Palette Cache"),
+                                Component.literal("Max Palette Cache"),
                                 config.getCustomMaxPaletteCache()
                         )
                         .setDefaultValue(128)
@@ -88,7 +88,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
 
                 // Upload buffer (KB)
                 category.addEntry(entryBuilder.startIntField(
-                                Text.literal("Max Upload Buffer (KB)"),
+                                Component.literal("Max Upload Buffer (KB)"),
                                 config.getCustomMaxUploadBufferSize() / 1024
                         )
                         .setDefaultValue(512)
@@ -99,7 +99,7 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
 
                 // Cache timeout
                 category.addEntry(entryBuilder.startLongField(
-                                Text.literal("Cache Keep Time (ms)"),
+                                Component.literal("Cache Keep Time (ms)"),
                                 config.getCustomPoolTimeoutMs()
                         )
                         .setDefaultValue(30000L)
