@@ -17,14 +17,12 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
 
-    // Nhờ fabric.loom.unobfuscated=false, dòng này sẽ hoạt động bình thường
-    "mappings"(loom.officialMojangMappings())
+    // Dùng implementation chuẩn của Gradle cho tất cả thư viện
+    implementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+    implementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
-    "modImplementation"("net.fabricmc:fabric-loader:${property("loader_version")}")
-    "modImplementation"("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
-    "modImplementation"("com.terraformersmc:modmenu:${property("modmenu_version")}")
-
-    // Explicit dependencies for standalone benchmark and future optimization code
+    // Dependencies khác
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
 }
@@ -33,11 +31,11 @@ loom {
     runs {
         named("client") {
             client()
-            runDir = "run"
+            runDir("run")
         }
         named("server") {
             server()
-            runDir = "run"
+            runDir("run")
         }
     }
 }
