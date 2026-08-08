@@ -1,0 +1,53 @@
+name: clear workflows
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0' # Automatically runs every Sunday at 00:00 UTC
+
+jobs:
+  delete-all-runs:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
+    steps:
+      - name: Delete all workflow runs except the current one
+        run: |
+          REPO="${{ github.repository }}"
+          CURRENT_RUN_ID="${{ github.run_id }}"
+          echo "Starting cleanup of all workflow history in $REPO..."
+          echo "Keeping the currently running workflow (ID: $CURRENT_RUN_ID)"
+          
+          while true; do
+            # Fetch the next 100 workflow run IDs (no status filter)
+            ALL_RUNS=$(gh run list --repo "$REPO" --json databaseId --jq '.[] | .databaseId' --limit 100)
+            
+            # Break the loop if the list is empty
+            if [ -z "$ALL_RUNS" ] || [ "$ALL_RUNS" = "[]" ]; then
+              echo "Finished scanning all workflow lists."
+              break
+            fi
+            
+            # Filter out the current workflow run ID from the deletion list
+            FILTERED_RUNS=$(echo "$ALL_RUNS" | grep -v "^${CURRENT_RUN_ID}$" || true)
+            
+            # If no other runs are left except the current one, terminate the loop
+            if [ -z "$FILTERED_RUNS" ]; then
+              echo "Only the current workflow is left. Cleanup completed!"
+              break
+            fi
+            
+            echo "Deleting this batch of workflows..."
+            for RUN_ID in $FILTERED_RUNS; do
+              echo "Deleting run ID: $RUN_ID"
+              gh run delete --repo "$REPO" "$RUN_ID"
+            done
+            
+            echo "Waiting 2 seconds before the next batch scan..."
+            sleep 2
+          done
+          
+          echo "Thorough cleanup completed successfully!"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
