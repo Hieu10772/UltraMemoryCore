@@ -14,24 +14,19 @@ public final class ChunkVisibilityTracker {
         }
 
         ChunkPos center = client.player.chunkPosition();
+        int viewDistance = client.options.renderDistance().get();
 
-        int viewDistance =
-                client.options.renderDistance().get();
-
-        // Giữ thêm 2 chunk đệm ngoài view distance
         int keepRadius = Math.max(6, viewDistance + 2);
 
         for (int x = -keepRadius; x <= keepRadius; x++) {
             for (int z = -keepRadius; z <= keepRadius; z++) {
 
                 ChunkPos pos = new ChunkPos(
-                        center.x + x,
-                        center.z + z
+                        center.x() + x,
+                        center.z() + z
                 );
 
-                // Chunk đang còn trong vùng nhìn
                 ChunkEvictionManager.markVisible(pos);
-
                 ChunkColdStorage.markVisible(pos);
             }
         }
