@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.mixin;
 
 import com.example.ultramemorycore.pool.PaletteArrayPool;
-import net.minecraft.world.chunk.PalettedContainer;
+import net.minecraft.world.level.chunk.PalettedContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
