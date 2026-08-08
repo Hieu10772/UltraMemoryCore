@@ -2,6 +2,13 @@ name: Build UltraMemoryCore
 
 on:
   workflow_dispatch:
+    inputs:
+      build_name:
+        description: 'Name'
+        required: true
+        default: 'Build'
+
+run-name: "🛠️ ${{ github.event.inputs.build_name }} (by @${{ github.actor }})"
 
 jobs:
   build:
