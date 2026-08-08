@@ -8,7 +8,7 @@ on:
         required: true
         default: 'Build UltraMemoryCore'
 
-run-name: "🛠️ ${{ github.event.inputs.build_name }} (by @${{ github.actor }})"
+run-name: "${{ github.event.inputs.build_name }}"
 
 jobs:
   build:
