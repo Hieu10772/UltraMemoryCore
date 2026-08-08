@@ -26,13 +26,10 @@ public class UmcCommand {
     private static int showStats(CommandSourceStack source) {
         Runtime r = Runtime.getRuntime();
 
-        long usedMB =
-                (r.totalMemory() - r.freeMemory()) / (1024 * 1024);
+        long usedMB = (r.totalMemory() - r.freeMemory()) / (1024 * 1024);
+        long maxMB = r.maxMemory() / (1024 * 1024);
 
-        long maxMB =
-                r.maxMemory() / (1024 * 1024);
-
-        source.sendFeedback(
+        source.sendSuccess(
                 () -> Component.literal(
                         "§a[UMC Stats] §fUsed: " + usedMB +
                         "MB / Max: " + maxMB +
@@ -46,12 +43,10 @@ public class UmcCommand {
     }
 
     private static int executeGC(CommandSourceStack source) {
-
         UltraMemoryCore.trimAllCaches();
-
         System.gc();
 
-        source.sendFeedback(
+        source.sendSuccess(
                 () -> Component.literal(
                         "§a[UMC] §fCaches trimmed and System.gc() invoked."
                 ),
@@ -62,8 +57,7 @@ public class UmcCommand {
     }
 
     private static int showBuffers(CommandSourceStack source) {
-
-        source.sendFeedback(
+        source.sendSuccess(
                 () -> Component.literal(
                         "§a[UMC Buffers] §fReused: " +
                         ArrayPools.REUSED_COUNT.get() +
