@@ -2,10 +2,10 @@ package com.example.ultramemorycore.config;
 
 import com.example.ultramemorycore.UltraMemoryCore;
 import com.example.ultramemorycore.memory.MemoryProfile;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.CyclingButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 public class UltraMemoryCoreConfigScreen extends Screen {
 
@@ -13,7 +13,7 @@ public class UltraMemoryCoreConfigScreen extends Screen {
     private UltraMemoryCoreConfig config;
 
     protected UltraMemoryCoreConfigScreen(Screen parent) {
-        super(Text.literal("UltraMemoryCore Settings"));
+        super(Component.literal("UltraMemoryCore Settings"));
         this.parent = parent;
         this.config = UltraMemoryCore.getConfig();
     }
@@ -24,51 +24,51 @@ public class UltraMemoryCoreConfigScreen extends Screen {
         int y = this.height / 4;
 
         // Enable / Disable
-        this.addDrawableChild(
-                CyclingButtonWidget.onOffBuilder(config.isEnabled())
-                        .build(centerX - 100, y, 200, 20,
-                                Text.literal("Enabled"),
+        this.addRenderableWidget(
+                CycleButton.onOffBuilder(config.isEnabled())
+                        .create(centerX - 100, y, 200, 20,
+                                Component.literal("Enabled"),
                                 (button, value) -> config.setEnabled(value))
         );
 
         y += 28;
 
         // Memory Profile
-        this.addDrawableChild(
-                CyclingButtonWidget.builder(profile ->
-                                Text.literal(profile.name()))
-                        .values(MemoryProfile.values())
-                        .initially(config.getMemoryProfile())
-                        .build(centerX - 100, y, 200, 20,
-                                Text.literal("Memory Profile"),
+        this.addRenderableWidget(
+                CycleButton.builder((MemoryProfile profile) ->
+                                Component.literal(profile.name()))
+                        .withValues(MemoryProfile.values())
+                        .withInitialValue(config.getMemoryProfile())
+                        .create(centerX - 100, y, 200, 20,
+                                Component.literal("Memory Profile"),
                                 (button, value) -> config.setMemoryProfile(value))
         );
 
         y += 40;
 
         // Save button
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Save"), b -> {
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Save"), b -> {
                             config.save();
-                            this.close();
+                            this.onClose();
                         })
-                        .dimensions(centerX - 100, y, 95, 20)
+                        .bounds(centerX - 100, y, 95, 20)
                         .build()
         );
 
         // Cancel button
-        this.addDrawableChild(
-                ButtonWidget.builder(Text.literal("Cancel"), b ->
-                                this.close())
-                        .dimensions(centerX + 5, y, 95, 20)
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Cancel"), b ->
+                                this.onClose())
+                        .bounds(centerX + 5, y, 95, 20)
                         .build()
         );
     }
 
     @Override
-    public void close() {
-        if (this.client != null) {
-            this.client.setScreen(parent);
+    public void onClose() {
+        if (this.minecraft != null) {
+            this.minecraft.setScreen(parent);
         }
     }
 }
