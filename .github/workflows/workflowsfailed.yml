@@ -21,7 +21,7 @@ jobs:
             # Lấy 100 ID lỗi tiếp theo
             FAILED_RUNS=$(gh run list --repo "$REPO" --status failure --json databaseId --jq '.[] | .databaseId' --limit 100)
             
-            # Nếu chuỗi trống đồng nghĩa đã sạch bóng workflow lỗi
+            # Kiểm tra nếu trống thì dừng vòng lặp
             if [ -z "$FAILED_RUNS" ] || [ "$FAILED_RUNS" = "[]" ]; then
               echo "Chúc mừng! Đã xóa sạch toàn bộ các workflow bị lỗi."
               break
@@ -30,12 +30,11 @@ jobs:
             echo "Tìm thấy danh sách mới, đang tiến hành xóa..."
             for RUN_ID in $FAILED_RUNS; do
               echo "Đang xóa run ID: $RUN_ID"
-              # Thêm --yes để tránh lệnh gh yêu cầu xác nhận thủ công
-              gh run delete --repo "$REPO" "$RUN_ID" --yes
+              # ĐÃ SỬA: Bỏ tham số --yes
+              gh run delete --repo "$REPO" "$RUN_ID"
             done
             
-            # Nghỉ 2 giây giữa các đợt quét để tránh bị GitHub chặn do gửi yêu cầu quá nhanh
-            echo "Đang chuẩn bị quét đợt tiếp theo..."
+            echo "Đang nghỉ 2 giây trước khi quét đợt tiếp theo..."
             sleep 2
           done
           
