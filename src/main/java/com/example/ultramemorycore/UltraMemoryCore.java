@@ -90,7 +90,7 @@ ClientTickEvents.END_CLIENT_TICK.register(client -> {
         return;
     }
 
-    if (client.world == null || client.player == null) {
+    if (client.level == null || client.player == null) {
         return;
     }
 
