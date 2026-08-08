@@ -15,11 +15,7 @@ repositories {
 }
 
 dependencies {
-    // Mojang Official Mappings cho 26.2
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    
-    // Sử dụng string invoke để định nghĩa configuration khi accessor chưa sinh
-    "mappings"(loom.officialMojangMappings())
 
     "modImplementation"("net.fabricmc:fabric-loader:${property("loader_version")}")
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
