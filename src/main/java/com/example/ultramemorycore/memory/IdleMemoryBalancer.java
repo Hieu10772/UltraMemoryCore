@@ -1,8 +1,8 @@
 package com.example.ultramemorycore.memory;
 
 import com.example.ultramemorycore.UltraMemoryCore;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 
 public final class IdleMemoryBalancer {
 
@@ -15,9 +15,9 @@ public final class IdleMemoryBalancer {
 
     private IdleMemoryBalancer() {}
 
-    public static void tick(MinecraftClient client) {
+    public static void tick(Minecraft client) {
 
-        ClientPlayerEntity player = client.player;
+        LocalPlayer player = client.player;
 
         if (player == null) {
             return;
