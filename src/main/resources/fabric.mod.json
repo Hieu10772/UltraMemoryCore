@@ -13,7 +13,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-        "com.example.ultramemorycore.UltraMemoryCoreFabric"
+        "com.example.ultramemorycore.UltraMemoryCore"
     ],
     "client": [
         "com.example.ultramemorycore.client.UltraMemoryClient"
