@@ -23,7 +23,6 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     .setParentScreen(parent)
                     .setTitle(Component.literal("UltraMemoryCore Settings"));
 
-            // Lưu toàn bộ config 1 lần duy nhất khi bấm Save & Done
             builder.setSavingRunnable(config::save);
 
             ConfigCategory category = builder.getOrCreateCategory(
@@ -71,7 +70,6 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                     .setSaveConsumer(config::setMemoryProfile)
                     .build());
 
-            // 3. Custom settings (Chỉ hiện khi profile hiện tại là CUSTOM)
             boolean custom = config.getMemoryProfile() == MemoryProfile.CUSTOM;
 
             if (custom) {
