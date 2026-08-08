@@ -2,6 +2,7 @@ package com.example.ultramemorycore.config;
 
 import com.example.ultramemorycore.UltraMemoryCore;
 import com.example.ultramemorycore.memory.MemoryProfile;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
@@ -12,7 +13,7 @@ public class UltraMemoryCoreConfigScreen extends Screen {
     private final Screen parent;
     private UltraMemoryCoreConfig config;
 
-    protected UltraMemoryCoreConfigScreen(Screen parent) {
+    public UltraMemoryCoreConfigScreen(Screen parent) {
         super(Component.literal("UltraMemoryCore Settings"));
         this.parent = parent;
         this.config = UltraMemoryCore.getConfig();
@@ -35,8 +36,7 @@ public class UltraMemoryCoreConfigScreen extends Screen {
 
         // Memory Profile
         this.addRenderableWidget(
-                CycleButton.builder((MemoryProfile profile) ->
-                                Component.literal(profile.name()))
+                CycleButton.<MemoryProfile>builder(profile -> Component.literal(profile.name()))
                         .withValues(MemoryProfile.values())
                         .withInitialValue(config.getMemoryProfile())
                         .create(centerX - 100, y, 200, 20,
@@ -67,8 +67,6 @@ public class UltraMemoryCoreConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        if (this.minecraft != null) {
-            this.minecraft.setScreen(parent);
-        }
+        Minecraft.getInstance().setScreen(this.parent);
     }
 }
