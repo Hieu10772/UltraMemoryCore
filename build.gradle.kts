@@ -17,11 +17,13 @@ repositories {
 dependencies {
     // Mojang Official Mappings cho 26.2
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
+    
+    // Sử dụng string invoke để định nghĩa configuration khi accessor chưa sinh
+    "mappings"(loom.officialMojangMappings())
 
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
-    modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
+    "modImplementation"("net.fabricmc:fabric-loader:${property("loader_version")}")
+    "modImplementation"("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+    "modImplementation"("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
     // Explicit dependencies for standalone benchmark and future optimization code
     implementation("com.google.code.gson:gson:2.13.1")
@@ -32,11 +34,11 @@ loom {
     runs {
         named("client") {
             client()
-            runDir("run")
+            runDir = "run"
         }
         named("server") {
             server()
-            runDir("run")
+            runDir = "run"
         }
     }
 }
