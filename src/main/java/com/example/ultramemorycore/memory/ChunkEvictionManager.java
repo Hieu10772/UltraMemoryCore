@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.level.ChunkPos;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -30,15 +30,15 @@ public final class ChunkEvictionManager {
         );
     }
 
-    public static void tick(MinecraftClient client) {
+    public static void tick(Minecraft client) {
 
-        if (client.world == null || client.player == null) {
+        if (client.level == null || client.player == null) {
             return;
         }
 
         long now = System.currentTimeMillis();
 
-        ChunkPos playerPos = client.player.getChunkPos();
+        ChunkPos playerPos = client.player.chunkPosition();
 
         boolean needSweep = false;
 
@@ -57,7 +57,7 @@ public final class ChunkEvictionManager {
             int dz = Math.abs(pos.z - playerPos.z);
 
             int limit =
-                    client.options.getViewDistance().getValue() + 4;
+                    client.options.renderDistance().get() + 4;
 
             // Chunk đã ở xa một thời gian
             if (age > SOFT_CLEANUP_MS &&
