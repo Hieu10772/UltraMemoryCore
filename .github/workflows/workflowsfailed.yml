@@ -1,0 +1,41 @@
+name: falied workflows
+
+on:
+  # Cho phép bấm nút chạy thủ công trên giao diện GitHub
+  workflow_dispatch:
+  
+  # Tự động chạy vào lúc 00:00 Chủ Nhật hàng tuần (tùy chọn)
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  delete-failed:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # Bắt buộc phải có quyền này để xóa run
+
+    steps:
+      - name: Xóa tất cả các workflow run bị lỗi
+        run: |
+          # Định nghĩa kho lưu trữ hiện tại
+          REPO="${{ github.repository }}"
+          
+          echo "Đang tìm các workflow bị lỗi trong $REPO..."
+          
+          # Lấy danh sách ID của các run bị lỗi (tối đa 100 run gần nhất)
+          FAILED_RUNS=$(gh run list --repo "$REPO" --status failed --json databaseId --jq '.[] | .databaseId' --limit 100)
+          
+          if [ -z "$FAILED_RUNS" ]; then
+            echo "Không tìm thấy workflow nào bị lỗi."
+            exit 0
+          fi
+          
+          # Vòng lặp xóa từng run tìm được
+          for RUN_ID in $FAILED_RUNS; do
+            echo "Đang xóa run ID: $RUN_ID"
+            gh run delete --repo "$REPO" "$RUN_ID"
+          done
+          
+          echo "Hoàn thành dọn dẹp!"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Sử dụng token có sẵn của GitHub
