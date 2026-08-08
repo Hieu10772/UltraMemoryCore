@@ -34,3 +34,9 @@ compileJava {
 processResources {
     from(project(':Common').sourceSets.main.resources)
 }
+
+// Đúng đoạn code gọi custom.gradle của FerriteCore
+def customGradle = project.file('custom.gradle')
+if (customGradle.exists()) {
+    apply from: customGradle
+}
