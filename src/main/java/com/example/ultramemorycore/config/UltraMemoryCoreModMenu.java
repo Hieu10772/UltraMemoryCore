@@ -8,6 +8,7 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.util.Optional;
@@ -85,14 +86,15 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                         config.setMemoryProfile(value);
                         config.save();
 
-                        // Trong Mojang Mappings gốc, MinecraftClient được đổi về tên gốc là Minecraft
                         Minecraft client = Minecraft.getInstance();
 
-                        client.execute(() ->
-                                client.setScreen(new UltraMemoryCoreModMenu()
-                                        .getModConfigScreenFactory()
-                                        .create(parent))
-                        );
+                        client.execute(() -> {
+                            // Ép kiểu rõ ràng về Screen để Java compiler không bị lỗi CAP#1
+                            Screen newScreen = (Screen) new UltraMemoryCoreModMenu()
+                                    .getModConfigScreenFactory()
+                                    .create(parent);
+                            client.setScreen(newScreen);
+                        });
                     })
                     .build());
 
