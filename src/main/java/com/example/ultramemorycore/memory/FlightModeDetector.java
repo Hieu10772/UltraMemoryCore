@@ -1,24 +1,24 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 
 public final class FlightModeDetector {
 
     private FlightModeDetector() {}
 
     public static boolean isFastElytraFlight() {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
 
         if (client == null) return false;
 
-        ClientPlayerEntity player = client.player;
+        LocalPlayer player = client.player;
 
         if (player == null) return false;
 
-        if (!player.isGliding()) return false;
+        if (!player.isFallFlying()) return false;
 
-        double speed = player.getVelocity().length();
+        double speed = player.getDeltaMovement().length();
 
         return speed > 1.2; // khoảng 20+ m/s
     }
