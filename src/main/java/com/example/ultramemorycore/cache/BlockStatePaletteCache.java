@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.cache;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockStatePaletteCache {
     private static final Int2ObjectOpenHashMap<BlockState> CACHE = new Int2ObjectOpenHashMap<>();
