@@ -9,8 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ChunkEvictionManager {
 
-    private static final Map<Long, Long> LAST_SEEN =
-            new ConcurrentHashMap<>();
+    private static final Map<Long, Long> LAST_SEEN = new ConcurrentHashMap<>();
 
     private static final long SOFT_CLEANUP_MS = 5_000L;
     private static final long HARD_UNLOAD_MS = 120_000L;
@@ -20,13 +19,12 @@ public final class ChunkEvictionManager {
 
     public static void markVisible(ChunkPos pos) {
         LAST_SEEN.put(
-                pos.toLong(),
+                ChunkPos.asLong(pos.x(), pos.z()),
                 System.currentTimeMillis()
         );
     }
 
     public static void tick(Minecraft client) {
-
         if (client.level == null || client.player == null) {
             return;
         }
@@ -35,11 +33,9 @@ public final class ChunkEvictionManager {
         ChunkPos playerPos = client.player.chunkPosition();
         boolean needSweep = false;
 
-        Iterator<Map.Entry<Long, Long>> it =
-                LAST_SEEN.entrySet().iterator();
+        Iterator<Map.Entry<Long, Long>> it = LAST_SEEN.entrySet().iterator();
 
         while (it.hasNext()) {
-
             Map.Entry<Long, Long> entry = it.next();
             long age = now - entry.getValue();
 
