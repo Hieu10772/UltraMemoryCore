@@ -12,20 +12,15 @@ public final class ChunkEvictionManager {
     private static final Map<Long, Long> LAST_SEEN =
             new ConcurrentHashMap<>();
 
-    // Sau 5 giây mới bắt đầu coi là chunk lạnh
     private static final long SOFT_CLEANUP_MS = 5_000L;
-
-    // Sau 2 phút thì bỏ khỏi tracking
     private static final long HARD_UNLOAD_MS = 120_000L;
-
-    // Chống sweep liên tục
     private static long lastSweep = 0L;
 
     private ChunkEvictionManager() {}
 
     public static void markVisible(ChunkPos pos) {
         LAST_SEEN.put(
-                pos.toLong(),
+                ChunkPos.asLong(pos.x(), pos.z()),
                 System.currentTimeMillis()
         );
     }
@@ -37,9 +32,7 @@ public final class ChunkEvictionManager {
         }
 
         long now = System.currentTimeMillis();
-
         ChunkPos playerPos = client.player.chunkPosition();
-
         boolean needSweep = false;
 
         Iterator<Map.Entry<Long, Long>> it =
@@ -48,37 +41,28 @@ public final class ChunkEvictionManager {
         while (it.hasNext()) {
 
             Map.Entry<Long, Long> entry = it.next();
-
             long age = now - entry.getValue();
 
-            ChunkPos pos = new ChunkPos(entry.getKey());
+            long chunkKey = entry.getKey();
+            ChunkPos pos = new ChunkPos(ChunkPos.getX(chunkKey), ChunkPos.getZ(chunkKey));
 
-            int dx = Math.abs(pos.x - playerPos.x);
-            int dz = Math.abs(pos.z - playerPos.z);
+            int dx = Math.abs(pos.x() - playerPos.x());
+            int dz = Math.abs(pos.z() - playerPos.z());
 
-            int limit =
-                    client.options.renderDistance().get() + 4;
+            int limit = client.options.renderDistance().get() + 4;
 
-            // Chunk đã ở xa một thời gian
-            if (age > SOFT_CLEANUP_MS &&
-                    (dx > limit || dz > limit)) {
-
+            if (age > SOFT_CLEANUP_MS && (dx > limit || dz > limit)) {
                 needSweep = true;
             }
 
-            // Quá 2 phút thì bỏ khỏi tracking
             if (age > HARD_UNLOAD_MS) {
                 it.remove();
             }
         }
 
-        // Chỉ dọn cache tối đa 1 lần mỗi 10 giây
         if (needSweep && now - lastSweep > 10_000L) {
-
             VoxelShapeCache.sweep();
-
             UltraFastPropertyMap.trim();
-
             lastSweep = now;
         }
     }
