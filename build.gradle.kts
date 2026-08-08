@@ -17,9 +17,8 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     
-    // BẮT BUỘC phải có mappings để Loom đăng ký modImplementation
-    // Với Minecraft 26.2 unobfuscated, dùng mojangMappings qua loom.layered
-    mappings(loom.layered {
+    // Gọi string invoke "mappings" để tránh lỗi Unresolved reference trong KTS
+    "mappings"(loom.layered {
         officialMojangMappings()
     })
 
@@ -36,11 +35,11 @@ loom {
     runs {
         named("client") {
             client()
-            runDir = "run"
+            runDir("run")
         }
         named("server") {
             server()
-            runDir = "run"
+            runDir("run")
         }
     }
 }
