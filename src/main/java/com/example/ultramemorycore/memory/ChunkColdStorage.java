@@ -27,8 +27,9 @@ public final class ChunkColdStorage {
     }
 
     public static void markVisible(ChunkPos pos) {
+        // Trên Minecraft 26.2, đóng gói x, z sang long dùng ChunkPos.pack
         LAST_VISIBLE.put(
-                pos.toLong(),
+                ChunkPos.pack(pos.x(), pos.z()),
                 System.currentTimeMillis()
         );
     }
