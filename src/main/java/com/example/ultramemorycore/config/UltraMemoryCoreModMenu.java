@@ -89,10 +89,12 @@ public final class UltraMemoryCoreModMenu implements ModMenuApi {
                         Minecraft client = Minecraft.getInstance();
 
                         client.execute(() -> {
-                            // Ép kiểu rõ ràng về Screen để Java compiler không bị lỗi CAP#1
-                            Screen newScreen = (Screen) new UltraMemoryCoreModMenu()
-                                    .getModConfigScreenFactory()
-                                    .create(parent);
+                            // Ép kiểu ConfigScreenFactory về đúng ConfigScreenFactory<Screen>
+                            // để xóa bỏ hoàn toàn Wildcard Capture CAP#1
+                            @SuppressWarnings({"unchecked", "rawtypes"})
+                            ConfigScreenFactory<Screen> factory = (ConfigScreenFactory) new UltraMemoryCoreModMenu().getModConfigScreenFactory();
+                            
+                            Screen newScreen = factory.create(parent);
                             client.setScreen(newScreen);
                         });
                     })
