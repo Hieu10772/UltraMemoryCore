@@ -1,8 +1,53 @@
-allprojects {
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.fabricmc.net/' }
-        maven { url 'https://maven.terraformersmc.com/releases/' }
-        maven { url 'https://maven.shedaniel.me/' }
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.11.7'
+    id 'java'
+}
+
+group = 'com.example.ultramemorycore'
+version = project.mod_version
+
+repositories {
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.terraformersmc.com/releases/' }
+    mavenCentral()
+}
+
+dependencies {
+    // 1. Minecraft
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    // 2. Fabric Loader & Fabric API
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // 3. ModMenu (Optional)
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
     }
 }
