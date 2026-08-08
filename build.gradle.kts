@@ -11,6 +11,7 @@ repositories {
     maven("https://maven.fabricmc.net/")
     maven("https://maven.terraformersmc.com/releases/")
     maven("https://maven.shedaniel.me/")
+    maven("https://libraries.mojang.net/")
 }
 
 dependencies {
@@ -20,7 +21,7 @@ dependencies {
     implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     implementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
-    implementation("me.shedaniel.cloth:cloth-config-fabric:${project.property("cloth_config_version")}")
+    modimplementation("me.shedaniel.cloth:cloth-config-fabric:${project.property("cloth_config_version")}")
 
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("it.unimi.dsi:fastutil:8.5.18")
