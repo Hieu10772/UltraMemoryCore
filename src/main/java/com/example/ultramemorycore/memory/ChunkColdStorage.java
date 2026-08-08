@@ -28,7 +28,7 @@ public final class ChunkColdStorage {
 
     public static void markVisible(ChunkPos pos) {
         LAST_VISIBLE.put(
-                ChunkPos.asLong(pos.x(), pos.z()),
+                pos.toLong(),
                 System.currentTimeMillis()
         );
     }
