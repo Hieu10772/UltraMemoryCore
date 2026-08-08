@@ -16,6 +16,12 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    
+    // BẮT BUỘC phải có mappings để Loom đăng ký modImplementation
+    // Với Minecraft 26.2 unobfuscated, dùng mojangMappings qua loom.layered
+    mappings(loom.layered {
+        officialMojangMappings()
+    })
 
     "modImplementation"("net.fabricmc:fabric-loader:${property("loader_version")}")
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
