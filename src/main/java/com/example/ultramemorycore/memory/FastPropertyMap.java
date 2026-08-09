@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class FastPropertyMap {
 
-    private static final ConcurrentHashMap<Integer, Map<?, ?>> INTERN =
+    private static final ConcurrentHashMap<Map<?, ?>, Map<?, ?>> INTERN =
             new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")
@@ -14,8 +14,13 @@ public final class FastPropertyMap {
             return original;
         }
 
-        int hash = original.hashCode();
-        return (Map<K, V>) INTERN.computeIfAbsent(hash, k -> original);
+        Map<?, ?> existing = INTERN.get(original);
+        if (existing != null) {
+            return (Map<K, V>) existing;
+        }
+
+        existing = INTERN.putIfAbsent(original, original);
+        return (Map<K, V>) (existing != null ? existing : original);
     }
 
     public static int size() {
