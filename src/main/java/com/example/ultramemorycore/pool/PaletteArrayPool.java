@@ -24,7 +24,17 @@ public class PaletteArrayPool {
 
     public static void release(int[] array) {
         if (array == null || array.length > 4096) return;
-        POOL.computeIfAbsent(array.length, k -> new ArrayDeque<>()).add(array);
+
+        Deque<int[]> stack = POOL.get(array.length);
+        if (stack == null) {
+            stack = POOL.computeIfAbsent(array.length, k -> new ArrayDeque<>());
+        }
+
+        synchronized (stack) {
+            if (stack.size() < 128) {
+                stack.push(array);
+            }
+        }
     }
 
     public static void clear() {
