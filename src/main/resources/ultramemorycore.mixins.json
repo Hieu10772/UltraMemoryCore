@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "com.example.ultramemorycore.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BufferBuilderMixin",
     "ChunkSectionMixin",
@@ -10,6 +10,6 @@
     "PalettedContainerMixin"
   ],
   "injectors": {
-    "defaultRequire": 0
+    "defaultRequire": 1
   }
 }
