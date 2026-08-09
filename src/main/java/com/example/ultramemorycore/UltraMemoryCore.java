@@ -47,17 +47,14 @@ public final class UltraMemoryCore {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        // Kiểm tra mod xung đột FerriteCore trên Forge 1.12.2
         if (Loader.isModLoaded("ferritecore")) {
             String message = "Please remove FerriteCore to use UltraMemoryCore, Bye FerriteCore!";
             LOGGER.error("[UltraMemoryCore] {}", message);
             throw new IllegalStateException(message);
         }
 
-        // Đọc cấu hình
         config = UltraMemoryCoreConfig.load(event.getSuggestedConfigurationFile());
 
-        // Nhận diện cấu hình phần cứng
         activeProfile = PlatformDetector.detectProfile(config.getMemoryProfile());
 
         LOGGER.info("[UltraMemoryCore] Initialized with Profile: {}", activeProfile);
@@ -65,14 +62,11 @@ public final class UltraMemoryCore {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        // Đăng ký Event Bus của Forge
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Đăng ký lệnh Client-side trên Forge 1.12.2
         ClientCommandHandler.instance.registerCommand(new UmcCommand());
     }
 
-    // Tick toàn bộ hệ thống quản lý bộ nhớ Client
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END || !isEnabled()) {
@@ -84,24 +78,20 @@ public final class UltraMemoryCore {
             return;
         }
 
-        // Chunk streaming
         ChunkFlightTrimmer.tick();
         ChunkGovernor.tick();
         ChunkEvictionManager.tick(client);
         ChunkVisibilityTracker.tick(client);
 
-        // Elytra / idle cleanup
         ElytraMemoryGuard.tick();
         PostFlightCleanup.tick(client);
         IdleMemoryBalancer.tick(client);
 
-        // Cold storage (unload chunk xa)
         ChunkColdStorage.tick(client);
     }
 
-    // Khi người dùng ngắt kết nối khỏi World / Server
     @SubscribeEvent
-    public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectedFromServerEvent event) {
+    public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         trimAllCaches();
         LOGGER.info("[UltraMemoryCore] World disconnected - caches trimmed.");
     }
