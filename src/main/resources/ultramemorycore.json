@@ -1,9 +1,0 @@
-{
-  "memoryProfile": "IOS_POJAV",
-  "enableNBTPooling": true,
-  "enablePaletteDeduplication": true,
-  "enableBufferPooling": true,
-  "enableIdentifierCache": true,
-  "aggressiveChunkCacheCleanup": true,
-  "maxTemporaryBufferMB": 24
-}
