@@ -89,7 +89,7 @@ public class UmcCommand extends CommandBase {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
-            return getListOfMatchingStrings(args, "stats", "gc", "buffers");
+            return getListOfMatchingStrings(args, new String[]{"stats", "gc", "buffers"});
         }
         return Collections.emptyList();
     }
