@@ -19,26 +19,26 @@ public final class UploadBufferPool {
     private static volatile long temporaryLimit = 16L * 1024L * 1024L;
 
     private UploadBufferPool() {}
-    
+
     public static void configure(long limitBytes) {
-     temporaryLimit = Math.max(1024L * 1024L, limitBytes);
- }
+        temporaryLimit = Math.max(1024L * 1024L, limitBytes);
+    }
+
     public static ByteBuffer acquire(int capacity) {
 
-        // iOS + Pojav: không reuse direct buffer để tránh native memory buildup
         if (PlatformDetector.disableUploadBufferPooling()) {
             return allocate(capacity);
         }
 
         int bucketSize = nextPowerOfTwo(capacity);
 
-int maxBucket = PlatformDetector.disableUploadBufferPooling()
-        ? IOS_MAX_BUCKET
-        : DESKTOP_MAX_BUCKET;
+        int maxBucket = PlatformDetector.disableUploadBufferPooling()
+                ? IOS_MAX_BUCKET
+                : DESKTOP_MAX_BUCKET;
 
-if (bucketSize > maxBucket) {
-    return allocate(bucketSize);
-}
+        if (bucketSize > maxBucket) {
+            return allocate(bucketSize);
+        }
 
         Deque<ByteBuffer> stack = BUCKETS.get(bucketSize);
 
@@ -58,34 +58,34 @@ if (bucketSize > maxBucket) {
 
     public static void release(ByteBuffer buffer) {
 
-    if (buffer == null || !buffer.isDirect()) {
-        return;
-    }
-
-    // iOS / Pojav: không giữ DirectBuffer
-    if (PlatformDetector.disableUploadBufferPooling()) {
-        return;
-    }
-
-    int capacity = buffer.capacity();
-
-    if (capacity > DESKTOP_MAX_BUCKET || capacity > temporaryLimit) {
-        return;
-    }
-
-    Deque<ByteBuffer> deque =
-            BUCKETS.computeIfAbsent(capacity, k -> new ArrayDeque<>());
-
-    synchronized (deque) {
-
-        // Giới hạn tối đa 4 buffer cho mỗi bucket
-        if (deque.size() >= 4) {
+        if (buffer == null || !buffer.isDirect()) {
             return;
         }
 
-        deque.offerFirst(buffer);
+        if (PlatformDetector.disableUploadBufferPooling()) {
+            return;
+        }
+
+        int capacity = buffer.capacity();
+
+        if (capacity > DESKTOP_MAX_BUCKET || capacity > temporaryLimit) {
+            return;
+        }
+
+        Deque<ByteBuffer> deque = BUCKETS.get(capacity);
+        if (deque == null) {
+            deque = BUCKETS.computeIfAbsent(capacity, k -> new ArrayDeque<>());
+        }
+
+        synchronized (deque) {
+
+            if (deque.size() >= 4) {
+                return;
+            }
+
+            deque.offerFirst(buffer);
+        }
     }
-}
 
     public static void clear() {
         BUCKETS.clear();
