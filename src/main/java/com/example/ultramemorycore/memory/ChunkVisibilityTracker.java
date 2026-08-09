@@ -1,35 +1,33 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.ChunkPos;
 
 public final class ChunkVisibilityTracker {
 
     private ChunkVisibilityTracker() {}
 
-    public static void tick(MinecraftClient client) {
+    public static void tick(Minecraft client) {
 
         if (client.player == null) {
             return;
         }
 
-        ChunkPos center = client.player.getChunkPos();
+        int centerX = client.player.chunkCoordX;
+        int centerZ = client.player.chunkCoordZ;
 
-        int viewDistance =
-                client.options.getViewDistance().getValue();
+        int viewDistance = client.gameSettings.renderDistanceChunks;
 
-        // Giữ thêm 2 chunk đệm ngoài view distance
         int keepRadius = Math.max(6, viewDistance + 2);
 
         for (int x = -keepRadius; x <= keepRadius; x++) {
             for (int z = -keepRadius; z <= keepRadius; z++) {
 
                 ChunkPos pos = new ChunkPos(
-                        center.x + x,
-                        center.z + z
+                        centerX + x,
+                        centerZ + z
                 );
 
-                // Chunk đang còn trong vùng nhìn
                 ChunkEvictionManager.markVisible(pos);
 
                 ChunkColdStorage.markVisible(pos);
