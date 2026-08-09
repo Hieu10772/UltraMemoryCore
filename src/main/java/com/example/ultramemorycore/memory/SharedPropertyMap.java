@@ -1,6 +1,6 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.state.property.Property;
+import net.minecraft.block.properties.IProperty;
 
 import java.util.Map;
 
@@ -8,8 +8,8 @@ public final class SharedPropertyMap {
 
     private SharedPropertyMap() {}
 
-    public static Map<Property<?>, Comparable<?>> share(
-            Map<Property<?>, Comparable<?>> map
+    public static Map<IProperty<?>, Comparable<?>> share(
+            Map<IProperty<?>, Comparable<?>> map
     ) {
         return UltraFastPropertyMap.intern(map);
     }
