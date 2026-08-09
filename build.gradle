@@ -11,6 +11,13 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group.startsWith('org.eclipse')) {
+                details.useVersion '3.17.100'
+            }
+        }
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -33,10 +40,9 @@ minecraft {
     mappings = project.mappings_version
 }
 
-// Ép phiên bản thư viện Eclipse tương thích với Java 8
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.group == 'org.eclipse.platform' && details.requested.name == 'org.eclipse.core.runtime') {
+        if (details.requested.group.startsWith('org.eclipse')) {
             details.useVersion '3.17.100'
         }
     }
