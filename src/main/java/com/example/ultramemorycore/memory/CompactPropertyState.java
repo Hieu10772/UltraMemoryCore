@@ -1,6 +1,6 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.state.property.Property;
+import net.minecraft.block.properties.IProperty;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -8,23 +8,23 @@ import java.util.Map;
 
 public final class CompactPropertyState {
 
-    private final Map<Property<?>, Comparable<?>> values;
+    private final Map<IProperty<?>, Comparable<?>> values;
     private final int compactHash;
 
-    private CompactPropertyState(Map<Property<?>, Comparable<?>> values, int compactHash) {
+    private CompactPropertyState(Map<IProperty<?>, Comparable<?>> values, int compactHash) {
         this.values = Collections.unmodifiableMap(values);
         this.compactHash = compactHash;
     }
 
-    public static CompactPropertyState from(Map<Property<?>, Comparable<?>> map) {
+    public static CompactPropertyState from(Map<IProperty<?>, Comparable<?>> map) {
 
-        LinkedHashMap<Property<?>, Comparable<?>> copy = new LinkedHashMap<>(map.size());
+        LinkedHashMap<IProperty<?>, Comparable<?>> copy = new LinkedHashMap<>(map.size());
 
         int hash = 1;
 
-        for (Map.Entry<Property<?>, Comparable<?>> entry : map.entrySet()) {
+        for (Map.Entry<IProperty<?>, Comparable<?>> entry : map.entrySet()) {
 
-            Property<?> property = entry.getKey();
+            IProperty<?> property = entry.getKey();
             Comparable<?> value = entry.getValue();
 
             copy.put(property, value);
@@ -36,7 +36,7 @@ public final class CompactPropertyState {
         return new CompactPropertyState(copy, hash);
     }
 
-    public Map<Property<?>, Comparable<?>> values() {
+    public Map<IProperty<?>, Comparable<?>> values() {
         return values;
     }
 
@@ -47,8 +47,13 @@ public final class CompactPropertyState {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof CompactPropertyState other
-                && compactHash == other.compactHash
-                && values.equals(other.values);
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof CompactPropertyState)) {
+            return false;
+        }
+        CompactPropertyState other = (CompactPropertyState) obj;
+        return compactHash == other.compactHash && values.equals(other.values);
     }
 }
