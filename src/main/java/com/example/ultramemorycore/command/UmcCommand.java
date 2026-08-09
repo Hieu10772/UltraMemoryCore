@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,8 +90,19 @@ public class UmcCommand extends CommandBase {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
-            return getListOfMatchingStrings(args, new String[]{"stats", "gc", "buffers"});
+            return getMatchingCompletions(args[0], "stats", "gc", "buffers");
         }
         return Collections.emptyList();
+    }
+
+    private static List<String> getMatchingCompletions(String input, String... options) {
+        List<String> matches = new ArrayList<>();
+        String lowerInput = input.toLowerCase();
+        for (String option : options) {
+            if (option.toLowerCase().startsWith(lowerInput)) {
+                matches.add(option);
+            }
+        }
+        return matches;
     }
 }
