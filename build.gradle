@@ -46,7 +46,7 @@ dependencies {
     compile "com.google.code.gson:gson:2.8.9"
     compile "it.unimi.dsi:fastutil:8.5.8"
     
-    // Thêm Mixin cho Forge 1.12.2
+    // Mixin cho Forge 1.12.2
     compile('org.spongepowered:mixin:0.8.5') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
@@ -57,11 +57,12 @@ dependencies {
 }
 
 mixin {
-    // Tự động thêm mixin config file vào jar (thay 'ultramemorycore' bằng mod_id của bạn)
-    add sourceSets.main, "mixins.${project.property('mod_id')}.json"
+    add sourceSets.main, "mixins.${project.property('mod_id')}.refmap.json"
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft_version
 
@@ -83,6 +84,8 @@ task runBenchmark(type: JavaExec) {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     manifest {
         attributes(
             'FMLCorePluginContainsFMLMod': 'true',
