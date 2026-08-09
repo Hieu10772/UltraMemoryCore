@@ -113,10 +113,10 @@ jar {
     }
 }
 
-// Bỏ qua tất cả các task Rangemap khi Gradle khởi tạo luồng công việc
 gradle.taskGraph.whenReady { taskGraph ->
     taskGraph.allTasks.each { task ->
-        if (task.name.contains("Rangemap") || task.name.contains("rangemap")) {
+        def taskName = task.name.toLowerCase()
+        if (taskName.contains("rangemap") || taskName.contains("retromap")) {
             task.enabled = false
         }
     }
