@@ -1,33 +1,18 @@
-{
-  "schemaVersion": 1,
-  "id": "ultramemorycore",
-  "version": "${version}",
-  "name": "UltraMemoryCore",
-  "description": "Reduces RAM usage and memory allocation overhead to improve Minecraft performance and stability.",
-  "authors": [
-    "Hieu10772"
-  ],
-  "contact": {},
-  "license": "MIT",
-  "icon": "assets/modid/icon.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-        "com.example.ultramemorycore.UltraMemoryCore"
+[
+  {
+    "modid": "ultramemorycore",
+    "name": "UltraMemoryCore",
+    "description": "Reduces RAM usage and memory allocation overhead to improve Minecraft performance and stability.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Hieu10772"
     ],
-    "client": [
-        "com.example.ultramemorycore.client.UltraMemoryClient"
-    ],
-    "modmenu": [
-    "com.example.ultramemorycore.config.UltraMemoryCoreModMenu"
-    ]
-},
-  "mixins": [
-    "ultramemorycore.mixins.json"
-  ],
-  "depends": {
-    "fabricloader": ">=0.17.2",
-    "minecraft": "~1.21.11",
-    "java": ">=21"
+    "credits": "",
+    "logoFile": "assets/modid/icon.png",
+    "screenshots": [],
+    "dependencies": []
   }
-}
+]
