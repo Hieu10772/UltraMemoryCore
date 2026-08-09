@@ -32,7 +32,13 @@ public final class UltraFastPropertyMap {
 
         PropertyKey key = PropertyKey.from(immutable);
 
-        return INTERN.computeIfAbsent(key, k -> immutable);
+        Map<IProperty<?>, Comparable<?>> existing = INTERN.get(key);
+        if (existing != null) {
+            return existing;
+        }
+
+        INTERN.put(key, immutable);
+        return immutable;
     }
 
     public static int size() {
