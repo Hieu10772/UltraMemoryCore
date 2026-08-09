@@ -28,8 +28,6 @@ public class UmcCommand extends CommandBase {
 
     @Override
     public int getRequiredPermissionLevel() {
-        // Trả về 0 để tất cả người chơi đều có thể dùng (tương đương source -> true)
-        // Đổi thành 2 nếu chỉ muốn OP / Server Admin dùng
         return 0;
     }
 
@@ -91,7 +89,7 @@ public class UmcCommand extends CommandBase {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
-            return getListOfMatchingMatchingLastWord(args, "stats", "gc", "buffers");
+            return getListOfMatchingStrings(args, "stats", "gc", "buffers");
         }
         return Collections.emptyList();
     }
