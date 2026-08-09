@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = 'https://maven.minecraftforge.net/' }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = project.property("mod_version")
+group = project.property("mod_group")
+archivesBaseName = project.property("mod_id")
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+    options.encoding = 'UTF-8'
+}
+
+minecraft {
+    version = "${project.minecraft_version}-${project.forge_version}"
+    runDir = "run"
+    mappings = project.mappings_version
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Fastutil và Gson cho Java 8 / Forge 1.12.2
+    compile "com.google.code.gson:gson:2.8.9"
+    compile "it.unimi.dsi:fastutil:8.5.8"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft_version
+
+    filesMatching("mcmod.info") {
+        expand "version": project.version, "mcversion": project.minecraft_version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+    }
+}
+
+task runBenchmark(type: JavaExec) {
+    group = "benchmark"
+    description = "Runs the standalone UltraMemoryCore memory allocation benchmark."
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.example.ultramemorycore.util.MemoryBenchmark"
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.name}" }
+    }
+}
