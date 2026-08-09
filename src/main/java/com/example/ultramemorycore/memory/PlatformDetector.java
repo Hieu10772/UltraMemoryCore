@@ -32,13 +32,10 @@ public final class PlatformDetector {
         return MemoryProfile.DESKTOP;
     }
 
-    /**
-     * Trên iOS + Pojav + MobileGLues việc reuse direct buffer thường phản tác dụng.
-     */
     public static boolean disableUploadBufferPooling() {
-    MemoryProfile profile = detectProfile(null);
+        MemoryProfile profile = detectProfile(null);
 
-    return profile == MemoryProfile.IOS_POJAV
-            || profile == MemoryProfile.LOW_RAM_ANDROID;
-}
+        return profile == MemoryProfile.IOS_POJAV
+                || profile == MemoryProfile.LOW_RAM_ANDROID;
+    }
 }
