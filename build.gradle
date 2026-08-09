@@ -11,11 +11,11 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
+    // Ép buộc buildscript hạ cấp thư viện Eclipse về Java 8
     configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.group.startsWith('org.eclipse')) {
-                details.useVersion '3.17.100'
-            }
+        resolutionStrategy {
+            force 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
+            force 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
         }
     }
 }
@@ -40,11 +40,15 @@ minecraft {
     mappings = project.mappings_version
 }
 
+// Ép buộc toàn bộ project sử dụng các bản build Eclipse tương thích Java 8
 configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.group.startsWith('org.eclipse')) {
-            details.useVersion '3.17.100'
-        }
+    resolutionStrategy {
+        force 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
+        force 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
+        force 'org.eclipse.platform:org.eclipse.equinox.preferences:3.8.0'
+        force 'org.eclipse.platform:org.eclipse.equinox.registry:3.9.0'
+        force 'org.eclipse.platform:org.eclipse.core.contenttype:3.7.800'
+        force 'org.eclipse.platform:org.eclipse.core.jobs:3.10.800'
     }
 }
 
