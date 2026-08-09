@@ -10,10 +10,13 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-        
-        classpath 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
-        classpath 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
-        classpath 'org.eclipse.platform:org.eclipse.jdt.core:3.18.0'
+    }
+    // Ép các thư viện Eclipse runtime về bản tương thích Java 8
+    configurations.all {
+        resolutionStrategy {
+            force 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
+            force 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
+        }
     }
 }
 
@@ -41,7 +44,6 @@ configurations.all {
     resolutionStrategy {
         force 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
         force 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
-        force 'org.eclipse.platform:org.eclipse.jdt.core:3.18.0'
     }
 }
 
@@ -58,6 +60,7 @@ dependencies {
     compile "com.google.code.gson:gson:2.8.9"
     compile "it.unimi.dsi:fastutil:8.5.8"
     
+    // Mixin cho Forge 1.12.2
     compile('org.spongepowered:mixin:0.8.5') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
@@ -110,6 +113,11 @@ jar {
     }
 }
 
-tasks.matching { it.name.contains("Rangemap") }.all {
-    enabled = false
+// Bỏ qua tất cả các task Rangemap khi Gradle khởi tạo luồng công việc
+gradle.taskGraph.whenReady { taskGraph ->
+    taskGraph.allTasks.each { task ->
+        if (task.name.contains("Rangemap") || task.name.contains("rangemap")) {
+            task.enabled = false
+        }
+    }
 }
