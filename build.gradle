@@ -2,6 +2,7 @@ buildscript {
     repositories {
         mavenCentral()
         maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -29,10 +30,11 @@ minecraft {
 
 repositories {
     mavenCentral()
+    maven { url = 'https://maven.minecraftforge.net/' }
+    maven { url = 'https://libraries.minecraft.net/' }
 }
 
 dependencies {
-    // Fastutil và Gson cho Java 8 / Forge 1.12.2
     compile "com.google.code.gson:gson:2.8.9"
     compile "it.unimi.dsi:fastutil:8.5.8"
 }
