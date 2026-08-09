@@ -10,13 +10,10 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-    }
-    // Ép buộc buildscript hạ cấp thư viện Eclipse về Java 8
-    configurations.all {
-        resolutionStrategy {
-            force 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
-            force 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
-        }
+        
+        classpath 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
+        classpath 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
+        classpath 'org.eclipse.platform:org.eclipse.jdt.core:3.18.0'
     }
 }
 
@@ -40,15 +37,11 @@ minecraft {
     mappings = project.mappings_version
 }
 
-// Ép buộc toàn bộ project sử dụng các bản build Eclipse tương thích Java 8
 configurations.all {
     resolutionStrategy {
         force 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
         force 'org.eclipse.platform:org.eclipse.equinox.common:3.10.800'
-        force 'org.eclipse.platform:org.eclipse.equinox.preferences:3.8.0'
-        force 'org.eclipse.platform:org.eclipse.equinox.registry:3.9.0'
-        force 'org.eclipse.platform:org.eclipse.core.contenttype:3.7.800'
-        force 'org.eclipse.platform:org.eclipse.core.jobs:3.10.800'
+        force 'org.eclipse.platform:org.eclipse.jdt.core:3.18.0'
     }
 }
 
@@ -65,7 +58,6 @@ dependencies {
     compile "com.google.code.gson:gson:2.8.9"
     compile "it.unimi.dsi:fastutil:8.5.8"
     
-    // Mixin cho Forge 1.12.2
     compile('org.spongepowered:mixin:0.8.5') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
@@ -116,4 +108,8 @@ jar {
     from("LICENSE") {
         rename { "${it}_${project.name}" }
     }
+}
+
+tasks.matching { it.name.contains("Rangemap") }.all {
+    enabled = false
 }
