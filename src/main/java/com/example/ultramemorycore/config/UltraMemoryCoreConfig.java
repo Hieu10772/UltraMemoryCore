@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Loader;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,8 +19,7 @@ public final class UltraMemoryCoreConfig {
             .setPrettyPrinting()
             .create();
 
-    // Lấy thư mục /config chuẩn của Forge 1.12.2
-    private static final Path CONFIG_PATH = Loader.instance().getConfigDir().toPath().resolve("ultramemorycore.json");
+    private static final Path DEFAULT_CONFIG_PATH = Loader.instance().getConfigDir().toPath().resolve("ultramemorycore.json");
 
     private boolean enabled = true;
 
@@ -28,6 +28,8 @@ public final class UltraMemoryCoreConfig {
     private int customMaxPaletteCache = 128;
     private int customMaxUploadBufferSize = 512 * 1024;
     private long customPoolTimeoutMs = 30_000L;
+
+    private transient Path targetPath = DEFAULT_CONFIG_PATH;
 
     public boolean isEnabled() {
         return enabled;
@@ -70,11 +72,17 @@ public final class UltraMemoryCoreConfig {
     }
 
     public static UltraMemoryCoreConfig load() {
-        if (Files.exists(CONFIG_PATH)) {
-            // Sử dụng Reader chuẩn Java 8 truyền thẳng vào Gson (tiết kiệm bộ nhớ hơn đọc String)
-            try (BufferedReader reader = Files.newBufferedReader(CONFIG_PATH, StandardCharsets.UTF_8)) {
+        return load(null);
+    }
+
+    public static UltraMemoryCoreConfig load(File file) {
+        Path path = (file != null) ? file.toPath() : DEFAULT_CONFIG_PATH;
+
+        if (Files.exists(path)) {
+            try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                 UltraMemoryCoreConfig config = GSON.fromJson(reader, UltraMemoryCoreConfig.class);
                 if (config != null) {
+                    config.targetPath = path;
                     return config;
                 }
             } catch (IOException e) {
@@ -83,17 +91,18 @@ public final class UltraMemoryCoreConfig {
         }
 
         UltraMemoryCoreConfig config = new UltraMemoryCoreConfig();
+        config.targetPath = path;
         config.save();
         return config;
     }
 
     public void save() {
+        Path path = (targetPath != null) ? targetPath : DEFAULT_CONFIG_PATH;
         try {
-            if (CONFIG_PATH.getParent() != null) {
-                Files.createDirectories(CONFIG_PATH.getParent());
+            if (path.getParent() != null) {
+                Files.createDirectories(path.getParent());
             }
-            // Sử dụng Writer chuẩn Java 8 cho Gson
-            try (BufferedWriter writer = Files.newBufferedWriter(CONFIG_PATH, StandardCharsets.UTF_8)) {
+            try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
                 GSON.toJson(this, writer);
             }
         } catch (IOException e) {
