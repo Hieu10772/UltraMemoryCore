@@ -3,9 +3,12 @@ package com.example.ultramemorycore.config;
 import com.example.ultramemorycore.memory.MemoryProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.common.Loader;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -15,10 +18,8 @@ public final class UltraMemoryCoreConfig {
             .setPrettyPrinting()
             .create();
 
-    private static final Path CONFIG_PATH =
-            FabricLoader.getInstance()
-                    .getConfigDir()
-                    .resolve("ultramemorycore.json");
+    // Lấy thư mục /config chuẩn của Forge 1.12.2
+    private static final Path CONFIG_PATH = Loader.instance().getConfigDir().toPath().resolve("ultramemorycore.json");
 
     private boolean enabled = true;
 
@@ -69,14 +70,16 @@ public final class UltraMemoryCoreConfig {
     }
 
     public static UltraMemoryCoreConfig load() {
-        try {
-            if (Files.exists(CONFIG_PATH)) {
-                String json = Files.readString(CONFIG_PATH);
-                UltraMemoryCoreConfig config = GSON.fromJson(json, UltraMemoryCoreConfig.class);
-                return config != null ? config : new UltraMemoryCoreConfig();
+        if (Files.exists(CONFIG_PATH)) {
+            // Sử dụng Reader chuẩn Java 8 truyền thẳng vào Gson (tiết kiệm bộ nhớ hơn đọc String)
+            try (BufferedReader reader = Files.newBufferedReader(CONFIG_PATH, StandardCharsets.UTF_8)) {
+                UltraMemoryCoreConfig config = GSON.fromJson(reader, UltraMemoryCoreConfig.class);
+                if (config != null) {
+                    return config;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         UltraMemoryCoreConfig config = new UltraMemoryCoreConfig();
@@ -86,8 +89,13 @@ public final class UltraMemoryCoreConfig {
 
     public void save() {
         try {
-            Files.createDirectories(CONFIG_PATH.getParent());
-            Files.writeString(CONFIG_PATH, GSON.toJson(this));
+            if (CONFIG_PATH.getParent() != null) {
+                Files.createDirectories(CONFIG_PATH.getParent());
+            }
+            // Sử dụng Writer chuẩn Java 8 cho Gson
+            try (BufferedWriter writer = Files.newBufferedWriter(CONFIG_PATH, StandardCharsets.UTF_8)) {
+                GSON.toJson(this, writer);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
