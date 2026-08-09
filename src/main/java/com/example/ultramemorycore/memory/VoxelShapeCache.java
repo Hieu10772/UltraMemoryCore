@@ -1,42 +1,39 @@
 package com.example.ultramemorycore.memory;
 
-import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class VoxelShapeCache {
 
-    private static final ConcurrentHashMap<Integer, WeakReference<VoxelShape>> CACHE =
+    private static final ConcurrentHashMap<Integer, WeakReference<AxisAlignedBB>> CACHE =
             new ConcurrentHashMap<>();
 
-    // Giới hạn để chống phình khi bay Elytra
     private static final int MAX_ENTRIES = 2048;
 
     private VoxelShapeCache() {}
 
-    public static VoxelShape deduplicate(VoxelShape shape) {
+    public static AxisAlignedBB deduplicate(AxisAlignedBB shape) {
 
         if (shape == null) {
             return null;
         }
 
-        // Dọn các WeakReference đã chết
         if ((CACHE.size() & 127) == 0) {
             sweep();
         }
 
-        // Chống cache phình vô hạn
         if (CACHE.size() > MAX_ENTRIES) {
             CACHE.clear();
         }
 
         int hash = VoxelShapeHasher.hash(shape);
 
-        WeakReference<VoxelShape> ref = CACHE.get(hash);
+        WeakReference<AxisAlignedBB> ref = CACHE.get(hash);
 
         if (ref != null) {
-            VoxelShape cached = ref.get();
+            AxisAlignedBB cached = ref.get();
 
             if (cached != null) {
                 return cached;
