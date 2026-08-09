@@ -1,0 +1,21 @@
+name: Self Delete Branch Via Git CLI
+
+on:
+  push:
+    branches:
+      - port-26.1.1
+
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+    steps:
+      # Sử dụng token cá nhân của bạn để tải mã nguồn và lấy quyền Ghi
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.MY_GIT_TOKEN }}
+
+      - name: Force delete branch via Git CLI
+        run: |
+          git push origin --delete port-26.1.1
