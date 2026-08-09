@@ -1,8 +1,8 @@
 package com.example.ultramemorycore.memory;
 
 import com.example.ultramemorycore.UltraMemoryCore;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 
 public final class IdleMemoryBalancer {
 
@@ -15,17 +15,17 @@ public final class IdleMemoryBalancer {
 
     private IdleMemoryBalancer() {}
 
-    public static void tick(MinecraftClient client) {
+    public static void tick(Minecraft client) {
 
-        ClientPlayerEntity player = client.player;
+        EntityPlayerSP player = client.player;
 
         if (player == null) {
             return;
         }
 
-        double x = player.getX();
-        double y = player.getY();
-        double z = player.getZ();
+        double x = player.posX;
+        double y = player.posY;
+        double z = player.posZ;
 
         boolean moved =
                 Math.abs(x - lastX) > 0.2 ||
@@ -48,14 +48,12 @@ public final class IdleMemoryBalancer {
 
         long now = System.currentTimeMillis();
 
-        // Đứng yên hơn 20 giây
         if (now - idleSince > 20000L &&
                 now - lastCleanup > 60000L) {
 
             Runtime r = Runtime.getRuntime();
             long usedMB = (r.totalMemory() - r.freeMemory()) / (1024 * 1024);
 
-            // Chỉ cleanup khi RAM đang cao
             if (usedMB > 1200) {
 
                 UltraMemoryCore.trimAllCaches();
