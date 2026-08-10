@@ -1,4 +1,4 @@
-buildscript {
+Buildscript {
     repositories {
         mavenCentral()
         maven { url = 'https://maven.cleanroommc.com' }
@@ -40,12 +40,6 @@ minecraft {
     mappings = project.mappings_version
 }
 
-// Khai báo configuration 'embed' để đóng gói thư viện vào file JAR
-configurations {
-    embed
-    compile.extendsFrom embed
-}
-
 configurations.all {
     resolutionStrategy {
         force 'org.eclipse.platform:org.eclipse.core.runtime:3.17.100'
@@ -66,8 +60,8 @@ dependencies {
     compile "com.google.code.gson:gson:2.8.9"
     compile "it.unimi.dsi:fastutil:8.5.8"
     
-    // Nhúng Mixin trực tiếp vào JAR mod thông qua 'embed'
-    embed('org.spongepowered:mixin:0.8.5') {
+    // Mixin cho Forge 1.12.2
+    compile('org.spongepowered:mixin:0.8.5') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
         exclude module: 'gson'
@@ -106,11 +100,6 @@ task runBenchmark(type: JavaExec) {
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // Giải nén các class Mixin và gộp trực tiếp vào mod JAR
-    from {
-        configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-
     manifest {
         attributes(
             'FMLCorePluginContainsFMLMod': 'true',
@@ -124,7 +113,6 @@ jar {
     }
 }
 
-// Vô hiệu hóa các task rangemap và retromap bị thiếu file cấu hình
 gradle.taskGraph.whenReady { taskGraph ->
     taskGraph.allTasks.each { task ->
         def taskName = task.name.toLowerCase()
