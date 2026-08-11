@@ -4,6 +4,7 @@ import com.example.ultramemorycore.cache.BlockStatePaletteCache;
 import com.example.ultramemorycore.cache.NbtStringPool;
 import com.example.ultramemorycore.command.UmcCommand;
 import com.example.ultramemorycore.config.UltraMemoryCoreConfig;
+import com.example.ultramemorycore.memory.AdaptiveCacheManager;
 import com.example.ultramemorycore.memory.ChunkColdStorage;
 import com.example.ultramemorycore.memory.ChunkEvictionManager;
 import com.example.ultramemorycore.memory.ChunkFlightTrimmer;
@@ -18,6 +19,7 @@ import com.example.ultramemorycore.memory.PostFlightCleanup;
 import com.example.ultramemorycore.memory.SharedPropertyMap;
 import com.example.ultramemorycore.memory.UltraFastPropertyMap;
 import com.example.ultramemorycore.memory.VoxelShapeCache;
+import com.example.ultramemorycore.memory.WeakCacheSweeper;
 import com.example.ultramemorycore.pool.ArrayPools;
 import com.example.ultramemorycore.pool.NettyDirectBufferPool;
 import com.example.ultramemorycore.pool.PaletteArrayPool;
@@ -82,6 +84,10 @@ public final class UltraMemoryCore implements ModInitializer {
             if (client.world == null || client.player == null) {
                 return;
             }
+
+            // Adaptive & Weak cache cleanup
+            AdaptiveCacheManager.tick();
+            WeakCacheSweeper.tick();
 
             // Chunk streaming
             ChunkFlightTrimmer.tick();
