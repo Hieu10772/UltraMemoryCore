@@ -17,11 +17,11 @@ public final class WeakCacheSweeper {
         REGISTERED_CACHES.add(cache);
     }
 
-    public static <T> void sweep(ConcurrentHashMap<Integer, ? extends Reference<T>> cache) {
-        Iterator<? extends Map.Entry<Integer, ? extends Reference<T>>> it = cache.entrySet().iterator();
+    public static void sweep(ConcurrentHashMap<Integer, ? extends Reference<?>> cache) {
+        Iterator<? extends Map.Entry<Integer, ? extends Reference<?>>> it = cache.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<Integer, ? extends Reference<T>> entry = it.next();
-            if (entry.getValue().get() == null) {
+            Map.Entry<Integer, ? extends Reference<?>> entry = it.next();
+            if (entry.getValue() != null && entry.getValue().get() == null) {
                 it.remove();
             }
         }
