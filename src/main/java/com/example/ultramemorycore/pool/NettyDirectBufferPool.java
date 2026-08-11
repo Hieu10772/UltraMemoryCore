@@ -1,4 +1,4 @@
-package com.ultramemorycore.pool;
+package com.example.ultramemorycore.pool;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
