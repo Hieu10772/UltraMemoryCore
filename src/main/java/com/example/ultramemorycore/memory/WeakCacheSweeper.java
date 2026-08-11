@@ -13,16 +13,10 @@ public final class WeakCacheSweeper {
 
     private WeakCacheSweeper() {}
 
-    /**
-     * Đăng ký một ConcurrentHashMap cần tự động quét rác định kỳ
-     */
     public static void register(ConcurrentHashMap<Integer, ? extends Reference<?>> cache) {
         REGISTERED_CACHES.add(cache);
     }
 
-    /**
-     * Quét dọn thủ công một cache cụ thể
-     */
     public static <T> void sweep(ConcurrentHashMap<Integer, ? extends Reference<T>> cache) {
         Iterator<? extends Map.Entry<Integer, ? extends Reference<T>>> it = cache.entrySet().iterator();
         while (it.hasNext()) {
@@ -33,9 +27,6 @@ public final class WeakCacheSweeper {
         }
     }
 
-    /**
-     * Được gọi mỗi tick từ UltraMemoryClient để dọn toàn bộ cache đã đăng ký
-     */
     public static void tick() {
         for (ConcurrentHashMap<Integer, ? extends Reference<?>> cache : REGISTERED_CACHES) {
             sweep(cache);
