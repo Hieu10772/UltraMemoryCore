@@ -1,6 +1,5 @@
 package com.example.ultramemorycore;
 
-import com.example.ultramemorycore.cache.BakedQuadDeduplicator;
 import com.example.ultramemorycore.cache.BlockStatePaletteCache;
 import com.example.ultramemorycore.cache.NbtStringPool;
 import com.example.ultramemorycore.command.UmcCommand;
@@ -23,8 +22,6 @@ import com.example.ultramemorycore.pool.ArrayPools;
 import com.example.ultramemorycore.pool.NettyDirectBufferPool;
 import com.example.ultramemorycore.pool.PaletteArrayPool;
 import com.example.ultramemorycore.pool.UploadBufferPool;
-import com.example.ultramemorycore.util.AllocationRateTracker;
-import com.example.ultramemorycore.util.GcPauseDetector;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -65,15 +62,10 @@ public final class UltraMemoryCore implements ModInitializer {
                 (dispatcher, registryAccess, environment) -> UmcCommand.register(dispatcher)
         );
 
-        // 1. Khởi chạy Thread phát hiện GC Pause ngầm
-        GcPauseDetector.start();
-
         // Đóng hẳn Minecraft
-        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
-            // Tắt Thread GcPauseDetector khi đóng game
-            GcPauseDetector.stop();
-            trimAllCaches();
-        });
+        ClientLifecycleEvents.CLIENT_STOPPING.register(
+                client -> trimAllCaches()
+        );
 
         // Rời world về menu chính
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
@@ -86,9 +78,6 @@ public final class UltraMemoryCore implements ModInitializer {
             if (!UltraMemoryCore.isEnabled()) {
                 return;
             }
-
-            // 2. Theo dõi tốc độ sinh rác RAM theo thời gian thực (MB/s)
-            AllocationRateTracker.tick();
 
             if (client.world == null || client.player == null) {
                 return;
@@ -132,7 +121,6 @@ public final class UltraMemoryCore implements ModInitializer {
         ArrayPools.clearAll();
         UploadBufferPool.clear();
 
-        BakedQuadDeduplicator.clear();
         NettyDirectBufferPool.clear();
 
         ChunkColdStorage.clear();
