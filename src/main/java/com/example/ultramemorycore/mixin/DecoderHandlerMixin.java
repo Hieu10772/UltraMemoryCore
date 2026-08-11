@@ -1,4 +1,4 @@
-package com.ultramemorycore.mixin;
+package com.example.ultramemorycore.mixin;
 
 import com.example.ultramemorycore.pool.NettyDirectBufferPool;
 import io.netty.buffer.ByteBuf;
