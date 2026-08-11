@@ -1,4 +1,4 @@
-package com.ultramemorycore.mixin;
+package com.example.ultramemorycore.mixin;
 
 import com.ultramemorycore.client.SpriteAtlasUnloader;
 import net.minecraft.client.texture.SpriteContents;
