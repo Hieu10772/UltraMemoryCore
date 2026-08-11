@@ -1,6 +1,6 @@
 package com.ultramemorycore.mixin;
 
-import com.ultramemorycore.pool.NettyDirectBufferPool;
+import com.example.ultramemorycore.pool.NettyDirectBufferPool;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.handler.EncoderHandler;
