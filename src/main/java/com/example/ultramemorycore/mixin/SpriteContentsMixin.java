@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.mixin;
 
 import com.example.ultramemorycore.client.SpriteAtlasUnloader;
-import net.minecraft.client.texture.SpriteContents;
+import net.minecraft.client.renderer.texture.SpriteContents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
