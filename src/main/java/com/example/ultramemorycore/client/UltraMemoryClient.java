@@ -15,7 +15,7 @@ public final class UltraMemoryClient implements ClientModInitializer {
             if (!UltraMemoryCore.isEnabled()) {
                 return;
             }
-            if (client.world == null || client.player == null) {
+            if (client.level == null || client.player == null) {
                 return;
             }
 
