@@ -5,9 +5,12 @@
   "mixins": [
     "BufferBuilderMixin",
     "ChunkSectionMixin",
+    "DecoderHandlerMixin",
+    "EncoderHandlerMixin",
     "ItemStackMixin",
     "NbtCompoundMixin",
-    "PalettedContainerMixin"
+    "PalettedContainerMixin",
+    "SpriteContentsMixin"
   ],
   "injectors": {
     "defaultRequire": 0
