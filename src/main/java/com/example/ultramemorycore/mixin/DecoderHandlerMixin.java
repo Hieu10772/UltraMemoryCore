@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(DecoderHandler.class)
+@Mixin(PacketDecoder.class)
 public class DecoderHandlerMixin {
 
     @Inject(
