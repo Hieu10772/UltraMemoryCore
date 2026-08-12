@@ -1,9 +1,20 @@
-# Example Mod
+# UltraMemoryCore
 
-## Setup
+<img src="src/main/resources/assets/modid/icon.png" width="128">
 
-For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
+**Reduces RAM usage and memory allocation overhead to improve Minecraft performance and stability.**
 
-## License
+---
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+### 📥 Downloads
+
+#### Stable builds
+
+The latest stable release of Sodium can be downloaded from our official [Modrinth](https://modrinth.com/project) pages.
+
+---
+
+## 📜 License
+
+The content of this repository is provided
+under the [Polyform Shield 1.0.0](LICENSE.md) license by [JellySquid](https://jellysquid.me).
