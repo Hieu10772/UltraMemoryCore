@@ -1,3 +1,3 @@
 # UltraMemoryCore
 
-<img src="src/main/resources/assets/moddid/icon.png" width="128">
+<img src="src/main/resources/assets/modid/icon.png" width="128">
