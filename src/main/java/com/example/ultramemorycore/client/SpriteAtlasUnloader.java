@@ -1,7 +1,7 @@
 package com.example.ultramemorycore.client;
 
 import com.example.ultramemorycore.mixin.SpriteContentsAccessor;
-import net.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.SpriteContents;
 
 public class SpriteAtlasUnloader {
