@@ -81,7 +81,7 @@ public final class UltraMemoryCore implements ModInitializer {
                 return;
             }
 
-            if (client.world == null || client.player == null) {
+            if (client.level == null || client.player == null) {
                 return;
             }
 
