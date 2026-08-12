@@ -3,7 +3,7 @@ package com.example.ultramemorycore.mixin;
 import com.example.ultramemorycore.pool.NettyDirectBufferPool;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.network.handler.EncoderHandler;
+import net.minecraft.network.PacketHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
